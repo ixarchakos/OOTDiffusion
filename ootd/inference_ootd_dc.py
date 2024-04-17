@@ -59,7 +59,7 @@ class OOTDiffusionDC:
             unet_vton=unet_vton,
             vae=vae,
             torch_dtype=torch.float16,
-            variant="fp16",
+            variant="no",
             use_safetensors=True,
             safety_checker=None,
             requires_safety_checker=False,
@@ -117,7 +117,7 @@ class OOTDiffusionDC:
                 prompt_embeds = torch.cat([prompt_embeds, prompt_image], dim=1)
             else:
                 raise ValueError("model_type must be \'hd\' or \'dc\'!")
-
+            print("mpika")
             images = self.pipe(prompt_embeds=prompt_embeds,
                         image_garm=image_garm,
                         image_vton=image_vton, 
