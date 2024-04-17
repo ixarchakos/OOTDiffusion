@@ -59,7 +59,7 @@ class OOTDiffusionHD:
             unet_vton=unet_vton,
             vae=vae,
             torch_dtype=torch.float16,
-            variant="no",
+            variant="fp16",
             use_safetensors=True,
             safety_checker=None,
             requires_safety_checker=False,
