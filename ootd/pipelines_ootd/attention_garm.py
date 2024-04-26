@@ -46,7 +46,7 @@ class GatedSelfAttentionDense(nn.Module):
         self.linear = nn.Linear(context_dim, query_dim)
 
         self.attn = Attention(query_dim=query_dim, heads=n_heads, dim_head=d_head)
-        self.ff = FeedForward(query_dim, activation_fn="geglu-approximate")
+        self.ff = FeedForward(query_dim, activation_fn="geglu")
 
         self.norm1 = nn.LayerNorm(query_dim)
         self.norm2 = nn.LayerNorm(query_dim)
@@ -112,7 +112,7 @@ class BasicTransformerBlock(nn.Module):
         attention_head_dim: int,
         dropout=0.0,
         cross_attention_dim: Optional[int] = None,
-        activation_fn: str = "geglu-approximate",
+        activation_fn: str = "geglu",
         num_embeds_ada_norm: Optional[int] = None,
         attention_bias: bool = False,
         only_cross_attention: bool = False,
@@ -364,7 +364,7 @@ class FeedForward(nn.Module):
         dim_out: Optional[int] = None,
         mult: int = 4,
         dropout: float = 0.0,
-        activation_fn: str = "geglu-approximate",
+        activation_fn: str = "geglu",
         final_dropout: bool = False,
     ):
         super().__init__()
@@ -396,7 +396,9 @@ class FeedForward(nn.Module):
         compatible_cls = (GEGLU,) if USE_PEFT_BACKEND else (GEGLU, LoRACompatibleLinear)
         for module in self.net:
             if isinstance(module, compatible_cls):
+                print("mpika 1")
                 hidden_states = module(hidden_states, scale)
             else:
+                print("mpika 2")
                 hidden_states = module(hidden_states)
         return hidden_states
