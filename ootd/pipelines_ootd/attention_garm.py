@@ -112,7 +112,7 @@ class BasicTransformerBlock(nn.Module):
         attention_head_dim: int,
         dropout=0.0,
         cross_attention_dim: Optional[int] = None,
-        activation_fn: str = "geglu",
+        activation_fn: str = "geglu-approximate",
         num_embeds_ada_norm: Optional[int] = None,
         attention_bias: bool = False,
         only_cross_attention: bool = False,
