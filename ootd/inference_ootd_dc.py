@@ -106,7 +106,7 @@ class OOTDiffusionDC:
         generator = torch.manual_seed(seed)
         
         with torch.no_grad():
-            print("mpika2")git 
+            print("mpika2")
             prompt_image = self.auto_processor(images=image_garm, return_tensors="pt").to(self.gpu_id)
             prompt_image = self.image_encoder(prompt_image.data['pixel_values']).image_embeds
             prompt_image = prompt_image.unsqueeze(1)
