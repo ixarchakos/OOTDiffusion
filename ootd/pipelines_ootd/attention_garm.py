@@ -46,7 +46,7 @@ class GatedSelfAttentionDense(nn.Module):
         self.linear = nn.Linear(context_dim, query_dim)
 
         self.attn = Attention(query_dim=query_dim, heads=n_heads, dim_head=d_head)
-        self.ff = FeedForward(query_dim, activation_fn="geglu")
+        self.ff = FeedForward(query_dim, activation_fn="geglu-approximate")
 
         self.norm1 = nn.LayerNorm(query_dim)
         self.norm2 = nn.LayerNorm(query_dim)
