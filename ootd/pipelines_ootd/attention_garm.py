@@ -364,7 +364,7 @@ class FeedForward(nn.Module):
         dim_out: Optional[int] = None,
         mult: int = 4,
         dropout: float = 0.0,
-        activation_fn: str = "geglu",
+        activation_fn: str = "geglu-approximate",
         final_dropout: bool = False,
     ):
         super().__init__()
