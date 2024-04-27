@@ -393,6 +393,7 @@ class FeedForward(nn.Module):
             self.net.append(nn.Dropout(dropout))
 
     def forward(self, hidden_states: torch.Tensor, scale: float = 1.0) -> torch.Tensor:
+        print(USE_PEFT_BACKEND)
         compatible_cls = (GEGLU,) if USE_PEFT_BACKEND else (GEGLU, LoRACompatibleLinear)
         for module in self.net:
             if isinstance(module, compatible_cls):
