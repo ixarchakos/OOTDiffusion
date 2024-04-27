@@ -207,7 +207,7 @@ class BasicTransformerBlock(nn.Module):
             self.scale_shift_table = nn.Parameter(torch.randn(6, dim) / dim**0.5)
 
         # let chunk size default to None
-        self._chunk_size = 2
+        self._chunk_size = None
         self._chunk_dim = 0
 
     def set_chunk_feed_forward(self, chunk_size: Optional[int], dim: int):
@@ -331,6 +331,8 @@ class BasicTransformerBlock(nn.Module):
                 dim=self._chunk_dim,
             )
         else:
+            print(norm_hidden_states.size())
+            exit()
             ff_output = self.ff(norm_hidden_states, scale=lora_scale)
 
         if self.use_ada_layer_norm_zero:
