@@ -367,7 +367,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
                 latent_vton_model_input = torch.cat([scaled_latent_model_input, vton_latents], dim=1)
                 # latent_vton_model_input = scaled_latent_model_input + vton_latents
 
-                spatial_attn_inputs = spatial_attn_outputs.copy()
+                spatial_attn_inputs = spatial_attn_outputs#.copy()
 
                 # predict the noise residual
                 noise_pred = self.unet_vton(
