@@ -207,7 +207,7 @@ class BasicTransformerBlock(nn.Module):
             self.scale_shift_table = nn.Parameter(torch.randn(6, dim) / dim**0.5)
 
         # let chunk size default to None
-        self._chunk_size = 256
+        self._chunk_size = 2
         self._chunk_dim = 0
 
     def set_chunk_feed_forward(self, chunk_size: Optional[int], dim: int):
