@@ -277,15 +277,15 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         scheduler_is_in_sigma_space = hasattr(self.scheduler, "sigmas")
 
         # 2. Encode input prompt
-        # prompt_embeds = self._encode_prompt(
-        #     prompt,
-        #     device,
-        #     num_images_per_prompt,
-        #     self.do_classifier_free_guidance,
-        #     negative_prompt,
-        #     prompt_embeds=prompt_embeds,
-        #     negative_prompt_embeds=negative_prompt_embeds,
-        # )
+        prompt_embeds = self._encode_prompt(
+            prompt,
+            device,
+            num_images_per_prompt,
+            self.do_classifier_free_guidance,
+            negative_prompt,
+            prompt_embeds=prompt_embeds,
+            negative_prompt_embeds=negative_prompt_embeds,
+        )
 
         # 3. Preprocess image
         image_garm = self.image_processor.preprocess(image_garm)
@@ -350,7 +350,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         # 9. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         self._num_timesteps = len(timesteps)
-        exit()
+
         _, spatial_attn_outputs = self.unet_garm(
             garm_latents,
             0,
