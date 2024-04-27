@@ -1075,7 +1075,7 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
                 additional_residuals = {}
                 if is_adapter and len(down_intrablock_additional_residuals) > 0:
                     additional_residuals["additional_residuals"] = down_intrablock_additional_residuals.pop(0)
-                exit()
+
                 sample, res_samples, spatial_attn_inputs = downsample_block(
                     hidden_states=sample,
                     spatial_attn_inputs=spatial_attn_inputs,
