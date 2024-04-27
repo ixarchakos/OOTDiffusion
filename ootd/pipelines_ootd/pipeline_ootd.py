@@ -364,11 +364,11 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
 
                 # concat latents, image_latents in the channel dimension
                 scaled_latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
-                latent_vton_model_input = torch.cat([scaled_latent_model_input, vton_latents], dim=1)
-                # latent_vton_model_input = scaled_latent_model_input + vton_latents
+                # latent_vton_model_input = torch.cat([scaled_latent_model_input, vton_latents], dim=1)
+                latent_vton_model_input = scaled_latent_model_input + vton_latents
 
-                spatial_attn_inputs = spatial_attn_outputs#.copy()
-
+                spatial_attn_inputs = spatial_attn_outputs  # .copy()
+                torch.cuda.empty_cache()
                 # predict the noise residual
                 noise_pred = self.unet_vton(
                     latent_vton_model_input,

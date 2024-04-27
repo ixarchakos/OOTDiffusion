@@ -394,13 +394,9 @@ class FeedForward(nn.Module):
 
     def forward(self, hidden_states: torch.Tensor, scale: float = 1.0) -> torch.Tensor:
         compatible_cls = (GEGLU,) if USE_PEFT_BACKEND else (GEGLU, LoRACompatibleLinear)
-        torch.cuda.empty_cache()
         for module in self.net:
-            print(module)
             if isinstance(module, compatible_cls):
-                print("mpika 1")
                 hidden_states = module(hidden_states, scale)
             else:
-                print("mpika 2")
                 hidden_states = module(hidden_states)
         return hidden_states
