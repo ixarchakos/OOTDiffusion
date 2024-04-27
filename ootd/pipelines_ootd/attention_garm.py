@@ -229,7 +229,7 @@ class BasicTransformerBlock(nn.Module):
         # Notice that normalization is always applied before the real computation in the following blocks.
         # 0. Self-Attention
         batch_size = hidden_states.shape[0]
-        hidden_states = hidden_states[:, :, 0]
+
         print(hidden_states.size())
         # spatial_attn_input = hidden_states
         spatial_attn_inputs.append(hidden_states)
