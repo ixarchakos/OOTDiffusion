@@ -350,14 +350,14 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         # 9. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         self._num_timesteps = len(timesteps)
-
+        exit()
         _, spatial_attn_outputs = self.unet_garm(
             garm_latents,
             0,
             encoder_hidden_states=prompt_embeds,
             return_dict=False,
         )
-        exit()
+
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
                 latent_model_input = torch.cat([latents] * 2) if self.do_classifier_free_guidance else latents
