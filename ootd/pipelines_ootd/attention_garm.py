@@ -332,6 +332,7 @@ class BasicTransformerBlock(nn.Module):
                 dim=self._chunk_dim,
             )
         else:
+            exit()
             ff_output = self.ff(norm_hidden_states, scale=lora_scale)
 
         if self.use_ada_layer_norm_zero:
@@ -395,10 +396,11 @@ class FeedForward(nn.Module):
 
     def forward(self, hidden_states: torch.Tensor, scale: float = 1.0) -> torch.Tensor:
         compatible_cls = (GEGLU,) if USE_PEFT_BACKEND else (GEGLU, LoRACompatibleLinear)
+
         for module in self.net:
             if isinstance(module, compatible_cls):
                 print("att_garm_400", torch.cuda.max_memory_allocated())
-                exit()
+
                 hidden_states = module(hidden_states, scale)
             else:
                 hidden_states = module(hidden_states)
