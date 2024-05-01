@@ -324,12 +324,12 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             self.do_classifier_free_guidance,
             generator,
         )
-
+        print("edw278")
+        exit()
         height, width = vton_latents.shape[-2:]
         height = height * self.vae_scale_factor
         width = width * self.vae_scale_factor
-        print("edw278")
-        exit()
+
         # 6. Prepare latent variables
         num_channels_latents = self.vae.config.latent_channels
         latents = self.prepare_latents(
