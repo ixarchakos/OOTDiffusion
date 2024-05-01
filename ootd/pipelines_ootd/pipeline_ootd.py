@@ -350,7 +350,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         self._num_timesteps = len(timesteps)
         print(self.unet_garm)
-        exit()
+        # exit()
         _, spatial_attn_outputs = self.unet_garm(
             garm_latents,
             0,
