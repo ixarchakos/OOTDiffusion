@@ -366,7 +366,7 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
             encoder_hidden_states = encoder_hidden_states.view(batch_size, -1, hidden_states.shape[-1])
 
         for block in self.transformer_blocks:
-            print(block)
+
             if self.training and self.gradient_checkpointing:
                 hidden_states, spatial_attn_inputs, spatial_attn_idx = torch.utils.checkpoint.checkpoint(
                     block,
