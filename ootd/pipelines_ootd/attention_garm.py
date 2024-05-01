@@ -368,7 +368,6 @@ class FeedForward(nn.Module):
         activation_fn: str = "geglu",
         final_dropout: bool = False,
     ):
-        print("att_garm_371", torch.cuda.max_memory_allocated())
         super().__init__()
         inner_dim = int(dim * mult)
         dim_out = dim_out if dim_out is not None else dim
