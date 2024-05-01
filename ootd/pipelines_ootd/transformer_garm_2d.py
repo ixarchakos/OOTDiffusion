@@ -225,8 +225,7 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
             self.norm_out = nn.LayerNorm(inner_dim, elementwise_affine=False, eps=1e-6)
             self.scale_shift_table = nn.Parameter(torch.randn(2, inner_dim) / inner_dim**0.5)
             self.proj_out = nn.Linear(inner_dim, patch_size * patch_size * self.out_channels)
-        print("edw")
-        exit()
+
         # 5. PixArt-Alpha blocks.
         self.adaln_single = None
         self.use_additional_conditions = False
@@ -235,7 +234,8 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
             # TODO(Sayak, PVP) clean this, for now we use sample size to determine whether to use
             # additional conditions until we find better name
             self.adaln_single = AdaLayerNormSingle(inner_dim, use_additional_conditions=self.use_additional_conditions)
-
+        print("edw")
+        exit()
         self.caption_projection = None
         if caption_channels is not None:
             self.caption_projection = CaptionProjection(in_features=caption_channels, hidden_size=inner_dim)
