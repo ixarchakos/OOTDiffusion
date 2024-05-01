@@ -275,7 +275,8 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         device = self._execution_device
         # check if scheduler is in sigmas space
         scheduler_is_in_sigma_space = hasattr(self.scheduler, "sigmas")
-
+        print("edw278")
+        exit()
         # 2. Encode input prompt
         prompt_embeds = self._encode_prompt(
             prompt,
@@ -324,8 +325,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             self.do_classifier_free_guidance,
             generator,
         )
-        print("edw327")
-        exit()
+
         height, width = vton_latents.shape[-2:]
         height = height * self.vae_scale_factor
         width = width * self.vae_scale_factor
