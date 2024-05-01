@@ -1137,11 +1137,10 @@ class CrossAttnDownBlock2D(nn.Module):
         lora_scale = cross_attention_kwargs.get("scale", 1.0) if cross_attention_kwargs is not None else 1.0
 
         blocks = list(zip(self.resnets, self.attentions))
-        print(self.downsamplers)
-        print(hidden_states.size())
-        for i, (resnet, attn) in enumerate(blocks):
 
+        for i, (resnet, attn) in enumerate(blocks):
             if self.training and self.gradient_checkpointing:
+
                 def create_custom_forward(module, return_dict=None):
                     def custom_forward(*inputs):
                         if return_dict is not None:
@@ -1170,7 +1169,6 @@ class CrossAttnDownBlock2D(nn.Module):
                 hidden_states = hidden_states[0]
             else:
                 hidden_states = resnet(hidden_states, temb, scale=lora_scale)
-                print(hidden_states.size())
                 hidden_states, spatial_attn_inputs = attn(
                     hidden_states,
                     spatial_attn_inputs=spatial_attn_inputs,
@@ -1185,6 +1183,8 @@ class CrossAttnDownBlock2D(nn.Module):
             # apply additional residuals to the output of the last pair of resnet and attention blocks
             if i == len(blocks) - 1 and additional_residuals is not None:
                 hidden_states = hidden_states + additional_residuals
+
+            output_states = output_states + (hidden_states,)
 
         if self.downsamplers is not None:
             for downsampler in self.downsamplers:
