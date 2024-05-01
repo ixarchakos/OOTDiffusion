@@ -914,7 +914,7 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
         # 0. center input if necessary
         if self.config.center_input_sample:
             sample = 2 * sample - 1.0
-
+        print("condition917", torch.cuda.max_memory_allocated())
         # 1. time
         timesteps = timestep
         if not torch.is_tensor(timesteps):
@@ -925,13 +925,12 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
                 dtype = torch.float32 if is_mps else torch.float64
             else:
                 dtype = torch.int32 if is_mps else torch.int64
-            timesteps = torch.tensor([timesteps], dtype=dtype, device='cpu')
+            timesteps = torch.tensor([timesteps], dtype=dtype, device=sample.device)
         elif len(timesteps.shape) == 0:
-            timesteps = timesteps[None].to('cpu')
+            timesteps = timesteps[None].to(sample.device)
 
         # broadcast to batch dimension in a way that's compatible with ONNX/Core ML
         timesteps = timesteps.expand(sample.shape[0])
-
         t_emb = self.time_proj(timesteps)
 
         # `Timesteps` does not contain any weights and will always return f32 tensors
@@ -939,8 +938,9 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
         # there might be better ways to encapsulate this.
         t_emb = t_emb.to(dtype=sample.dtype)
 
-        emb = self.time_embedding(t_emb, timestep_cond.to('cpu'))
+        emb = self.time_embedding(t_emb, timestep_cond)
         aug_emb = None
+        print("condition943", torch.cuda.max_memory_allocated())
 
         if self.class_embedding is not None:
             if class_labels is None:
