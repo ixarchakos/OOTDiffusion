@@ -57,8 +57,9 @@ if __name__ == '__main__':
         raise ValueError("model_type \'hd\' requires category == 0 (upperbody)!")
 
     cloth_img = Image.open(cloth_path).resize((768, 1024)).convert("RGB")
-    cloth_img.save("/home/xarchakosi/cloth1.jpg")
-    model_img = Image.open(model_path).resize((768, 1024))
+    cloth_img.save(cloth_img.filename)
+    model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
+    cloth_img.save(model_img.filename)
     keypoints = openpose_model(model_img.resize((384, 512)))
     model_parse, _ = parsing_model(model_img.resize((384, 512)))
     mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
