@@ -1148,7 +1148,10 @@ class CrossAttnDownBlock2D(nn.Module):
         #     output_states = output_states + (hidden_states,)
         for i, (resnet, attn) in enumerate(blocks):
             for downsampler in self.downsamplers:
-                hidden_states = downsampler(hidden_states, scale=lora_scale)
+                try:
+                    hidden_states = downsampler(hidden_states, scale=lora_scale)
+                except Exception:
+                    pass
             if self.training and self.gradient_checkpointing:
 
                 def create_custom_forward(module, return_dict=None):
