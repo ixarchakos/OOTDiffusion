@@ -231,7 +231,6 @@ class BasicTransformerBlock(nn.Module):
         batch_size = hidden_states.shape[0]
 
         print(hidden_states.size())
-        exit()
         # spatial_attn_input = hidden_states
         spatial_attn_inputs.append(hidden_states)
 
