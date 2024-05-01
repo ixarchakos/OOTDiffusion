@@ -232,7 +232,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
                 second element is a list of `bool`s indicating whether the corresponding generated image contains
                 "not-safe-for-work" (nsfw) content.
         """
-
+        print("235", torch.cuda.max_memory_allocated())
         callback = kwargs.pop("callback", None)
         callback_steps = kwargs.pop("callback_steps", None)
 
@@ -260,7 +260,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         )
         self._guidance_scale = guidance_scale
         self._image_guidance_scale = image_guidance_scale
-
+        print("263", torch.cuda.max_memory_allocated())
         if (image_vton is None) or (image_garm is None):
             raise ValueError("`image` input cannot be undefined.")
 
@@ -275,7 +275,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         device = self._execution_device
         # check if scheduler is in sigmas space
         scheduler_is_in_sigma_space = hasattr(self.scheduler, "sigmas")
-
+        print("278", torch.cuda.max_memory_allocated())
         # 2. Encode input prompt
         prompt_embeds = self._encode_prompt(
             prompt,
@@ -286,7 +286,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             prompt_embeds=prompt_embeds,
             negative_prompt_embeds=negative_prompt_embeds,
         )
-
+        print("289", torch.cuda.max_memory_allocated())
         # 3. Preprocess image
         image_garm = self.image_processor.preprocess(image_garm)
         image_vton = self.image_processor.preprocess(image_vton)
@@ -297,11 +297,11 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         mask = torch.tensor(mask)
         mask = mask / 255
         mask = mask.reshape(-1, 1, mask.size(-2), mask.size(-1))
-
+        print("300", torch.cuda.max_memory_allocated())
         # 4. set timesteps
         self.scheduler.set_timesteps(num_inference_steps, device=device)
         timesteps = self.scheduler.timesteps
-
+        print("304", torch.cuda.max_memory_allocated())
         # 5. Prepare Image latents
         garm_latents = self.prepare_garm_latents(
             image_garm,
@@ -312,7 +312,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             self.do_classifier_free_guidance,
             generator,
         )
-
+        print("315", torch.cuda.max_memory_allocated())
         vton_latents, mask_latents, image_ori_latents = self.prepare_vton_latents(
             image_vton,
             mask,
@@ -324,8 +324,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             self.do_classifier_free_guidance,
             generator,
         )
-        print(torch.cuda.memory_allocated())
-        print(torch.cuda.max_memory_allocated())
+        print("327", torch.cuda.max_memory_allocated())
         height, width = vton_latents.shape[-2:]
         height = height * self.vae_scale_factor
         width = width * self.vae_scale_factor
@@ -351,7 +350,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         # 9. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         self._num_timesteps = len(timesteps)
-
+        exit()
         _, spatial_attn_outputs = self.unet_garm(
             garm_latents,
             0,
