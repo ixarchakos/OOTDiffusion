@@ -341,7 +341,8 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             generator,
             latents,
         )
-
+        print("edw344")
+        exit()
         noise = latents.clone()
 
         # 8. Prepare extra step kwargs. TODO: Logic should ideally just be moved out of the pipeline
@@ -350,8 +351,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         # 9. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         self._num_timesteps = len(timesteps)
-        print("edw353")
-        exit()
+
         _, spatial_attn_outputs = self.unet_garm(
             garm_latents,
             0,
