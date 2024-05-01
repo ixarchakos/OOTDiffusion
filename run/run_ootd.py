@@ -46,9 +46,7 @@ seed = args.seed
 if model_type == "hd":
     model = OOTDiffusionHD(args.gpu_id)
 elif model_type == "dc":
-    print("52", torch.cuda.max_memory_allocated())
     model = OOTDiffusionDC(args.gpu_id)
-    print("54", torch.cuda.max_memory_allocated())
 else:
     raise ValueError("model_type must be \'hd\' or \'dc\'!")
 
