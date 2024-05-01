@@ -384,7 +384,7 @@ class FeedForward(nn.Module):
 
         self.net = nn.ModuleList([])
         # project in
-        self.net.append(GELU(dim, 2560, approximate="tanh"))
+        self.net.append(GELU(dim, 1280, approximate="tanh"))
         # project dropout
         self.net.append(nn.Dropout(dropout))
         # project out
