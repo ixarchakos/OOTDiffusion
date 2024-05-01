@@ -231,6 +231,7 @@ class BasicTransformerBlock(nn.Module):
         batch_size = hidden_states.shape[0]
 
         print(hidden_states.size())
+        exit()
         # spatial_attn_input = hidden_states
         spatial_attn_inputs.append(hidden_states)
 
@@ -261,7 +262,7 @@ class BasicTransformerBlock(nn.Module):
         # 2. Prepare GLIGEN inputs
         cross_attention_kwargs = cross_attention_kwargs.copy() if cross_attention_kwargs is not None else {}
         gligen_kwargs = cross_attention_kwargs.pop("gligen", None)
-        exit()
+
         attn_output = self.attn1(
             norm_hidden_states,
             encoder_hidden_states=encoder_hidden_states if self.only_cross_attention else None,
