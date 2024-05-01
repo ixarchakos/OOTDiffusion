@@ -1096,7 +1096,7 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
                     sample += down_intrablock_additional_residuals.pop(0)
 
             down_block_res_samples += res_samples
-
+        print(is_controlnet)
         if is_controlnet:
             new_down_block_res_samples = ()
 

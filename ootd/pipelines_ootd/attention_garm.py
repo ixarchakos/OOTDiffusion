@@ -332,7 +332,6 @@ class BasicTransformerBlock(nn.Module):
                 dim=self._chunk_dim,
             )
         else:
-            exit()
             ff_output = self.ff(norm_hidden_states, scale=lora_scale)
 
         if self.use_ada_layer_norm_zero:
