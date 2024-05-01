@@ -11,7 +11,7 @@ from preprocess.humanparsing.run_parsing import Parsing
 from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
 
-exit()
+
 import argparse
 parser = argparse.ArgumentParser(description='run ootd')
 parser.add_argument('--gpu_id', '-g', type=int, default=0, required=False)
@@ -25,10 +25,12 @@ parser.add_argument('--sample', type=int, default=4, required=False)
 parser.add_argument('--seed', type=int, default=-1, required=False)
 args = parser.parse_args()
 
-
+print("28", torch.cuda.max_memory_allocated())
 openpose_model = OpenPose(args.gpu_id)
+print("30", torch.cuda.max_memory_allocated())
 parsing_model = Parsing(args.gpu_id)
-
+print("32", torch.cuda.max_memory_allocated())
+exit()
 
 category_dict = ['upperbody', 'lowerbody', 'dress']
 category_dict_utils = ['upper_body', 'lower_body', 'dresses']
@@ -52,28 +54,19 @@ else:
 
 
 if __name__ == '__main__':
-    exit()
+
     if model_type == 'hd' and category != 0:
         raise ValueError("model_type \'hd\' requires category == 0 (upperbody)!")
-    print("58", torch.cuda.max_memory_allocated())
+
     cloth_img = Image.open(cloth_path).resize((768, 1024))
-    print("60", torch.cuda.max_memory_allocated())
     model_img = Image.open(model_path).resize((768, 1024))
-    print("62", torch.cuda.max_memory_allocated())
     keypoints = openpose_model(model_img.resize((384, 512)))
-    print("64", torch.cuda.max_memory_allocated())
     model_parse, _ = parsing_model(model_img.resize((384, 512)))
-    print("66", torch.cuda.max_memory_allocated())
     mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
-    print("68", torch.cuda.max_memory_allocated())
     mask = mask.resize((768, 1024), Image.NEAREST)
-    print("70", torch.cuda.max_memory_allocated())
     mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
-    print("72", torch.cuda.max_memory_allocated())
     masked_vton_img = Image.composite(mask_gray, model_img, mask)
-    print("74", torch.cuda.max_memory_allocated())
     masked_vton_img.save('./images_output/mask.jpg')
-    print("76", torch.cuda.max_memory_allocated())
     images = model(
         model_type=model_type,
         category=category_dict[category],
