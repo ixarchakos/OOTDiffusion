@@ -1109,7 +1109,6 @@ class CrossAttnDownBlock2D(nn.Module):
         self.resnets = nn.ModuleList(resnets)
 
         if add_downsample:
-
             self.downsamplers = nn.ModuleList(
                 [
                     Downsample2D(
@@ -1169,6 +1168,8 @@ class CrossAttnDownBlock2D(nn.Module):
                 )
                 hidden_states = hidden_states[0]
             else:
+                print("edw1171")
+                exit()
                 hidden_states = resnet(hidden_states, temb, scale=lora_scale)
                 hidden_states, spatial_attn_inputs = attn(
                     hidden_states,
