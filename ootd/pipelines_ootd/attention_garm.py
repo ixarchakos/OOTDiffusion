@@ -398,6 +398,7 @@ class FeedForward(nn.Module):
         for module in self.net:
             if isinstance(module, compatible_cls):
                 print("att_garm_400", torch.cuda.max_memory_allocated())
+                exit()
                 hidden_states = module(hidden_states, scale)
             else:
                 hidden_states = module(hidden_states)
