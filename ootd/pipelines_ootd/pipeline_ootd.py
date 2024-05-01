@@ -576,10 +576,10 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
                 return_tensors="pt",
             )
 
-            if hasattr(self.text_encoder.config, "use_attention_mask") and self.text_encoder.config.use_attention_mask:
-                attention_mask = uncond_input.attention_mask.to(device)
-            else:
-                attention_mask = None
+            # if hasattr(self.text_encoder.config, "use_attention_mask") and self.text_encoder.config.use_attention_mask:
+            #     attention_mask = uncond_input.attention_mask.to(device)
+            # else:
+            #     attention_mask = None
 
         if do_classifier_free_guidance:
             prompt_embeds = torch.cat([prompt_embeds, prompt_embeds])
