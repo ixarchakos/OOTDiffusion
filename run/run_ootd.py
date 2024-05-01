@@ -56,13 +56,13 @@ if __name__ == '__main__':
     if model_type == 'hd' and category != 0:
         raise ValueError("model_type \'hd\' requires category == 0 (upperbody)!")
 
-    cloth_img = Image.open(cloth_path).resize((384, 512))
-    model_img = Image.open(model_path).resize((384, 512))
+    cloth_img = Image.open(cloth_path).resize((768, 1024))
+    model_img = Image.open(model_path).resize((768, 1024))
     keypoints = openpose_model(model_img.resize((384, 512)))
     model_parse, _ = parsing_model(model_img.resize((384, 512)))
     mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
-    mask = mask.resize((384, 512), Image.NEAREST)
-    mask_gray = mask_gray.resize((384, 512), Image.NEAREST)
+    mask = mask.resize((768, 1024), Image.NEAREST)
+    mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
     masked_vton_img = Image.composite(mask_gray, model_img, mask)
     masked_vton_img.save('./images_output/mask.jpg')
     images = model(
