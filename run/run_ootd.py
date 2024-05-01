@@ -5,13 +5,13 @@ from utils_ootd import get_mask_location
 import torch
 PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
-exit()
+
 from preprocess.openpose.run_openpose import OpenPose
 from preprocess.humanparsing.run_parsing import Parsing
 from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
 
-
+exit()
 import argparse
 parser = argparse.ArgumentParser(description='run ootd')
 parser.add_argument('--gpu_id', '-g', type=int, default=0, required=False)
