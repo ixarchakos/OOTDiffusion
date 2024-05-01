@@ -324,8 +324,8 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             self.do_classifier_free_guidance,
             generator,
         )
-        print("edw278")
-        exit()
+        print(torch.cuda.memory_allocated())
+        print(torch.cuda.max_memory_allocated())
         height, width = vton_latents.shape[-2:]
         height = height * self.vae_scale_factor
         width = width * self.vae_scale_factor
