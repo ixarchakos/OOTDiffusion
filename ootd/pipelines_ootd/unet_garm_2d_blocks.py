@@ -1171,7 +1171,6 @@ class CrossAttnDownBlock2D(nn.Module):
                 print(hidden_states.size())
                 print("blocks1172", torch.cuda.max_memory_allocated())
                 hidden_states = resnet(hidden_states, temb, scale=lora_scale)
-                torch.cuda.empty_cache()
                 print("blocks1174", torch.cuda.max_memory_allocated())
                 print(hidden_states.size())
                 hidden_states, spatial_attn_inputs = attn(
