@@ -383,7 +383,6 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
         else:
             self.class_embedding = None
 
-        addition_embed_type = None
 
         if addition_embed_type == "text":
             if encoder_hid_dim is not None:
@@ -962,6 +961,8 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
                 emb = torch.cat([emb, class_emb], dim=-1)
             else:
                 emb = emb + class_emb
+
+        self.config.addition_embed_type = None
 
         if self.config.addition_embed_type == "text":
             aug_emb = self.add_embedding(encoder_hidden_states)
