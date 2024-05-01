@@ -275,8 +275,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         device = self._execution_device
         # check if scheduler is in sigmas space
         scheduler_is_in_sigma_space = hasattr(self.scheduler, "sigmas")
-        print("edw278")
-        exit()
+
         # 2. Encode input prompt
         prompt_embeds = self._encode_prompt(
             prompt,
@@ -298,7 +297,8 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         mask = torch.tensor(mask)
         mask = mask / 255
         mask = mask.reshape(-1, 1, mask.size(-2), mask.size(-1))
-
+        print("edw278")
+        exit()
         # 4. set timesteps
         self.scheduler.set_timesteps(num_inference_steps, device=device)
         timesteps = self.scheduler.timesteps
