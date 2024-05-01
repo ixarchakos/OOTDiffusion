@@ -368,7 +368,6 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
                 # latent_vton_model_input = scaled_latent_model_input + vton_latents
 
                 spatial_attn_inputs = spatial_attn_outputs.copy()
-                print(latent_vton_model_input.size())
                 # predict the noise residual
                 noise_pred = self.unet_vton(
                     latent_vton_model_input,

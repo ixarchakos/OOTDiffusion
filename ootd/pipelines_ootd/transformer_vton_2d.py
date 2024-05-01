@@ -359,6 +359,7 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
                 )
 
         # 2. Blocks
+        print(hidden_states.size())
         if self.caption_projection is not None:
             batch_size = hidden_states.shape[0]
             encoder_hidden_states = self.caption_projection(encoder_hidden_states)
