@@ -297,8 +297,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         mask = torch.tensor(mask)
         mask = mask / 255
         mask = mask.reshape(-1, 1, mask.size(-2), mask.size(-1))
-        print("edw278")
-        exit()
+
         # 4. set timesteps
         self.scheduler.set_timesteps(num_inference_steps, device=device)
         timesteps = self.scheduler.timesteps
@@ -313,7 +312,8 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             self.do_classifier_free_guidance,
             generator,
         )
-
+        print("edw278")
+        exit()
         vton_latents, mask_latents, image_ori_latents = self.prepare_vton_latents(
             image_vton,
             mask,
