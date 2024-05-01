@@ -378,6 +378,7 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
                     use_reentrant=False,
                 )
             else:
+
                 hidden_states, spatial_attn_inputs = block(
                     hidden_states,
                     spatial_attn_inputs,
