@@ -1138,7 +1138,7 @@ class CrossAttnDownBlock2D(nn.Module):
 
         blocks = list(zip(self.resnets, self.attentions))
         print(self.downsamplers)
-        exit()
+        # exit()
         if self.downsamplers is not None:
             for downsampler in self.downsamplers:
                 try:
