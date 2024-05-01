@@ -197,7 +197,7 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
         mid_block_scale_factor: float = 1,
         dropout: float = 0.0,
         act_fn: str = "silu",
-        norm_num_groups: Optional[int] = 32,
+        norm_num_groups: Optional[int] = 4,
         norm_eps: float = 1e-5,
         cross_attention_dim: Union[int, Tuple[int]] = 1280,
         transformer_layers_per_block: Union[int, Tuple[int], Tuple[Tuple]] = 1,
