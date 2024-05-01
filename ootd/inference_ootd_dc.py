@@ -104,7 +104,7 @@ class OOTDiffusionDC:
             seed = random.randint(0, 2147483647)
         print('Initial seed: ' + str(seed))
         generator = torch.manual_seed(seed)
-        print("107", torch.cuda.max_memory_allocated())
+
         with torch.no_grad():
             prompt_image = self.auto_processor(images=image_garm, return_tensors="pt").to(self.gpu_id)
             prompt_image = self.image_encoder(prompt_image.data['pixel_values']).image_embeds
@@ -118,7 +118,7 @@ class OOTDiffusionDC:
                 prompt_embeds = torch.cat([prompt_embeds, prompt_image], dim=1)
             else:
                 raise ValueError("model_type must be \'hd\' or \'dc\'!")
-            print("121", torch.cuda.max_memory_allocated())
+
             images = self.pipe(prompt_embeds=prompt_embeds,
                         image_garm=image_garm,
                         image_vton=image_vton, 

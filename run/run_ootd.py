@@ -2,7 +2,7 @@ from pathlib import Path
 import sys
 from PIL import Image
 from utils_ootd import get_mask_location
-
+import torch
 PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -55,19 +55,25 @@ if __name__ == '__main__':
 
     if model_type == 'hd' and category != 0:
         raise ValueError("model_type \'hd\' requires category == 0 (upperbody)!")
-
+    print("58", torch.cuda.max_memory_allocated())
     cloth_img = Image.open(cloth_path).resize((768, 1024))
+    print("60", torch.cuda.max_memory_allocated())
     model_img = Image.open(model_path).resize((768, 1024))
+    print("62", torch.cuda.max_memory_allocated())
     keypoints = openpose_model(model_img.resize((384, 512)))
+    print("64", torch.cuda.max_memory_allocated())
     model_parse, _ = parsing_model(model_img.resize((384, 512)))
-
+    print("66", torch.cuda.max_memory_allocated())
     mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
+    print("68", torch.cuda.max_memory_allocated())
     mask = mask.resize((768, 1024), Image.NEAREST)
+    print("70", torch.cuda.max_memory_allocated())
     mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
-    
+    print("72", torch.cuda.max_memory_allocated())
     masked_vton_img = Image.composite(mask_gray, model_img, mask)
+    print("74", torch.cuda.max_memory_allocated())
     masked_vton_img.save('./images_output/mask.jpg')
-
+    print("76", torch.cuda.max_memory_allocated())
     images = model(
         model_type=model_type,
         category=category_dict[category],
