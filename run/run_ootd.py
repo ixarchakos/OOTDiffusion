@@ -27,9 +27,7 @@ args = parser.parse_args()
 
 
 openpose_model = OpenPose(args.gpu_id)
-print("30", torch.cuda.max_memory_allocated())
 parsing_model = Parsing(args.gpu_id)
-print("32", torch.cuda.max_memory_allocated())
 
 
 category_dict = ['upperbody', 'lowerbody', 'dress']
@@ -53,7 +51,7 @@ elif model_type == "dc":
     print("54", torch.cuda.max_memory_allocated())
 else:
     raise ValueError("model_type must be \'hd\' or \'dc\'!")
-exit()
+
 
 if __name__ == '__main__':
 
