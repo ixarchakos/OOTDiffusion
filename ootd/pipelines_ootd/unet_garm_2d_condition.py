@@ -1038,7 +1038,7 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
             encoder_hidden_states = self.encoder_hid_proj(image_embeds)
         # 2. pre-process
         print(sample.size())
-        sample = self.conv_in(sample)
+        # sample = self.conv_in(sample)
         print(sample.size())
 
         # 2.5 GLIGEN position net
