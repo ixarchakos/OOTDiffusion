@@ -1168,6 +1168,7 @@ class CrossAttnDownBlock2D(nn.Module):
                 )
                 hidden_states = hidden_states[0]
             else:
+                print(resnet)
                 hidden_states = resnet(hidden_states, temb, scale=lora_scale)
                 print("blocks1174", torch.cuda.max_memory_allocated())
                 print(hidden_states.size())

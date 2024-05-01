@@ -914,7 +914,6 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
         # 0. center input if necessary
         if self.config.center_input_sample:
             sample = 2 * sample - 1.0
-        print("condition917", torch.cuda.max_memory_allocated())
         # 1. time
         timesteps = timestep
         if not torch.is_tensor(timesteps):
@@ -940,7 +939,6 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
 
         emb = self.time_embedding(t_emb, timestep_cond)
         aug_emb = None
-        print("condition943", torch.cuda.max_memory_allocated())
 
         if self.class_embedding is not None:
             if class_labels is None:
