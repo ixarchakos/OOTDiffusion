@@ -30,7 +30,7 @@ openpose_model = OpenPose(args.gpu_id)
 print("30", torch.cuda.max_memory_allocated())
 parsing_model = Parsing(args.gpu_id)
 print("32", torch.cuda.max_memory_allocated())
-exit()
+
 
 category_dict = ['upperbody', 'lowerbody', 'dress']
 category_dict_utils = ['upper_body', 'lower_body', 'dresses']
@@ -46,12 +46,14 @@ n_samples = args.sample
 seed = args.seed
 
 if model_type == "hd":
+    print("49", torch.cuda.max_memory_allocated())
     model = OOTDiffusionHD(args.gpu_id)
 elif model_type == "dc":
+    print("51", torch.cuda.max_memory_allocated())
     model = OOTDiffusionDC(args.gpu_id)
 else:
     raise ValueError("model_type must be \'hd\' or \'dc\'!")
-
+exit()
 
 if __name__ == '__main__':
 
