@@ -52,7 +52,7 @@ else:
 
 
 if __name__ == '__main__':
-
+    exit()
     if model_type == 'hd' and category != 0:
         raise ValueError("model_type \'hd\' requires category == 0 (upperbody)!")
     print("58", torch.cuda.max_memory_allocated())
