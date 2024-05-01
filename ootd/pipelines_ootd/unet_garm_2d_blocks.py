@@ -1168,7 +1168,9 @@ class CrossAttnDownBlock2D(nn.Module):
                 )
                 hidden_states = hidden_states[0]
             else:
+                print(hidden_states.size())
                 hidden_states = resnet(hidden_states, temb, scale=lora_scale)
+                print(hidden_states.size())
                 hidden_states, spatial_attn_inputs = attn(
                     hidden_states,
                     spatial_attn_inputs=spatial_attn_inputs,

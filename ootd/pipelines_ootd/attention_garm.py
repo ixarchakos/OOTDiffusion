@@ -368,6 +368,7 @@ class FeedForward(nn.Module):
         activation_fn: str = "geglu",
         final_dropout: bool = False,
     ):
+        print("att_garm_371", torch.cuda.max_memory_allocated())
         super().__init__()
         inner_dim = int(dim * mult)
         dim_out = dim_out if dim_out is not None else dim
@@ -381,7 +382,7 @@ class FeedForward(nn.Module):
             act_fn = GEGLU(dim, inner_dim)
         elif activation_fn == "geglu-approximate":
             act_fn = ApproximateGELU(dim, inner_dim)
-    
+
         self.net = nn.ModuleList([])
         # project in
         self.net.append(act_fn)
