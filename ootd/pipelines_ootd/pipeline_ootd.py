@@ -349,7 +349,8 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         # 9. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         self._num_timesteps = len(timesteps)
-        print("352", torch.cuda.max_memory_allocated())
+        print(self.unet_garm)
+        exit()
         _, spatial_attn_outputs = self.unet_garm(
             garm_latents,
             0,
