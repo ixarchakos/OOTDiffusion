@@ -359,39 +359,40 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
                 )
 
         # 2. Blocks
-        # print(hidden_states.size())
-        # if self.caption_projection is not None:
-        #     batch_size = hidden_states.shape[0]
-        #     encoder_hidden_states = self.caption_projection(encoder_hidden_states)
-        #     encoder_hidden_states = encoder_hidden_states.view(batch_size, -1, hidden_states.shape[-1])
-        #
-        # for block in self.transformer_blocks:
-        #     if self.training and self.gradient_checkpointing:
-        #         hidden_states, spatial_attn_inputs, spatial_attn_idx = torch.utils.checkpoint.checkpoint(
-        #             block,
-        #             hidden_states,
-        #             spatial_attn_inputs,
-        #             spatial_attn_idx,
-        #             attention_mask,
-        #             encoder_hidden_states,
-        #             encoder_attention_mask,
-        #             timestep,
-        #             cross_attention_kwargs,
-        #             class_labels,
-        #             use_reentrant=False,
-        #         )
-        #     else:
-        #         hidden_states, spatial_attn_inputs, spatial_attn_idx = block(
-        #             hidden_states,
-        #             spatial_attn_inputs,
-        #             spatial_attn_idx,
-        #             attention_mask=attention_mask,
-        #             encoder_hidden_states=encoder_hidden_states,
-        #             encoder_attention_mask=encoder_attention_mask,
-        #             timestep=timestep,
-        #             cross_attention_kwargs=cross_attention_kwargs,
-        #             class_labels=class_labels,
-        #         )
+        print(hidden_states.size())
+        if self.caption_projection is not None:
+            batch_size = hidden_states.shape[0]
+            encoder_hidden_states = self.caption_projection(encoder_hidden_states)
+            encoder_hidden_states = encoder_hidden_states.view(batch_size, -1, hidden_states.shape[-1])
+
+        for block in self.transformer_blocks:
+            print(block)
+            if self.training and self.gradient_checkpointing:
+                hidden_states, spatial_attn_inputs, spatial_attn_idx = torch.utils.checkpoint.checkpoint(
+                    block,
+                    hidden_states,
+                    spatial_attn_inputs,
+                    spatial_attn_idx,
+                    attention_mask,
+                    encoder_hidden_states,
+                    encoder_attention_mask,
+                    timestep,
+                    cross_attention_kwargs,
+                    class_labels,
+                    use_reentrant=False,
+                )
+            else:
+                hidden_states, spatial_attn_inputs, spatial_attn_idx = block(
+                    hidden_states,
+                    spatial_attn_inputs,
+                    spatial_attn_idx,
+                    attention_mask=attention_mask,
+                    encoder_hidden_states=encoder_hidden_states,
+                    encoder_attention_mask=encoder_attention_mask,
+                    timestep=timestep,
+                    cross_attention_kwargs=cross_attention_kwargs,
+                    class_labels=class_labels,
+                )
 
         # 3. Output
         if self.is_input_continuous:
