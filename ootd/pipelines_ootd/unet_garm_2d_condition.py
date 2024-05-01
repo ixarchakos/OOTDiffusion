@@ -962,7 +962,7 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
             else:
                 emb = emb + class_emb
 
-        self.config.addition_embed_type = None
+
 
         if self.config.addition_embed_type == "text":
             aug_emb = self.add_embedding(encoder_hidden_states)
@@ -1037,8 +1037,9 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
             image_embeds = added_cond_kwargs.get("image_embeds")
             encoder_hidden_states = self.encoder_hid_proj(image_embeds)
         # 2. pre-process
+        print(sample.size())
         sample = self.conv_in(sample)
-
+        print(sample.size())
 
         # 2.5 GLIGEN position net
         if cross_attention_kwargs is not None and cross_attention_kwargs.get("gligen", None) is not None:
