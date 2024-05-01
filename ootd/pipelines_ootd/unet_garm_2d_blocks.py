@@ -1139,16 +1139,9 @@ class CrossAttnDownBlock2D(nn.Module):
         blocks = list(zip(self.resnets, self.attentions))
         print(self.downsamplers)
         print(hidden_states.size())
-        downsampler = Downsample2D(
-                        320, use_conv=True, out_channels=320, padding=1, name="op"
-                    )
-        hidden_states = downsampler(hidden_states, scale=lora_scale)
-
-            # break
         for i, (resnet, attn) in enumerate(blocks):
 
             if self.training and self.gradient_checkpointing:
-
                 def create_custom_forward(module, return_dict=None):
                     def custom_forward(*inputs):
                         if return_dict is not None:
@@ -1177,7 +1170,6 @@ class CrossAttnDownBlock2D(nn.Module):
                 hidden_states = hidden_states[0]
             else:
                 hidden_states = resnet(hidden_states, temb, scale=lora_scale)
-                print("blocks1174", torch.cuda.max_memory_allocated())
                 print(hidden_states.size())
                 hidden_states, spatial_attn_inputs = attn(
                     hidden_states,
@@ -1190,8 +1182,6 @@ class CrossAttnDownBlock2D(nn.Module):
                 )
                 hidden_states = hidden_states[0]
 
-
-
             # apply additional residuals to the output of the last pair of resnet and attention blocks
             if i == len(blocks) - 1 and additional_residuals is not None:
                 hidden_states = hidden_states + additional_residuals
@@ -1201,7 +1191,6 @@ class CrossAttnDownBlock2D(nn.Module):
                 hidden_states = downsampler(hidden_states, scale=lora_scale)
 
             output_states = output_states + (hidden_states,)
-
 
         return hidden_states, output_states, spatial_attn_inputs
 
