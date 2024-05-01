@@ -384,7 +384,7 @@ class FeedForward(nn.Module):
 
         self.net = nn.ModuleList([])
         # project in
-        self.net.append(act_fn)
+        self.net.append(ApproximateGELU(dim, inner_dim))
         # project dropout
         self.net.append(nn.Dropout(dropout))
         # project out
@@ -394,7 +394,7 @@ class FeedForward(nn.Module):
             self.net.append(nn.Dropout(dropout))
 
     def forward(self, hidden_states: torch.Tensor, scale: float = 1.0) -> torch.Tensor:
-        compatible_cls = (ApproximateGELU,) if USE_PEFT_BACKEND else (ApproximateGELU, LoRACompatibleLinear)
+        compatible_cls = (GEGLU,) if USE_PEFT_BACKEND else (GEGLU, LoRACompatibleLinear)
         for module in self.net:
             if isinstance(module, compatible_cls):
                 print("att_garm_400", torch.cuda.max_memory_allocated())
