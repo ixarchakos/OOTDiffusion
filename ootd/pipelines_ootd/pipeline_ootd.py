@@ -313,6 +313,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             generator,
         )
         print("315", torch.cuda.max_memory_allocated())
+        exit()
         vton_latents, mask_latents, image_ori_latents = self.prepare_vton_latents(
             image_vton,
             mask,
