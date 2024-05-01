@@ -381,7 +381,8 @@ class FeedForward(nn.Module):
             act_fn = GEGLU(dim, inner_dim)
         elif activation_fn == "geglu-approximate":
             act_fn = ApproximateGELU(dim, inner_dim)
-        act_fn = GELU(dim, inner_dim/2)
+        print(inner_dim)
+        act_fn = ApproximateGELU(dim, inner_dim/2)
         self.net = nn.ModuleList([])
         # project in
         self.net.append(act_fn)
