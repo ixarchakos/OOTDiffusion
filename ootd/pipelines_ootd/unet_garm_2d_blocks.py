@@ -1134,8 +1134,6 @@ class CrossAttnDownBlock2D(nn.Module):
     ) -> Tuple[torch.FloatTensor, Tuple[torch.FloatTensor, ...]]:
         output_states = ()
 
-        print("edw1137")
-        exit()
         lora_scale = cross_attention_kwargs.get("scale", 1.0) if cross_attention_kwargs is not None else 1.0
 
         blocks = list(zip(self.resnets, self.attentions))
@@ -1171,6 +1169,8 @@ class CrossAttnDownBlock2D(nn.Module):
                 hidden_states = hidden_states[0]
             else:
                 hidden_states = resnet(hidden_states, temb, scale=lora_scale)
+                print("edw1137")
+                exit()
                 hidden_states, spatial_attn_inputs = attn(
                     hidden_states,
                     spatial_attn_inputs=spatial_attn_inputs,
