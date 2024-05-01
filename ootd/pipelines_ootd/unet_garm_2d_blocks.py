@@ -1168,14 +1168,12 @@ class CrossAttnDownBlock2D(nn.Module):
                 )
                 hidden_states = hidden_states[0]
             else:
-                print(self.downsamplers)
                 if self.downsamplers is not None:
                     for downsampler in self.downsamplers:
                         hidden_states = downsampler(hidden_states, scale=lora_scale)
 
                     output_states = output_states + (hidden_states,)
 
-                print(resnet)
                 hidden_states = resnet(hidden_states, temb, scale=lora_scale)
                 print("blocks1174", torch.cuda.max_memory_allocated())
                 print(hidden_states.size())
