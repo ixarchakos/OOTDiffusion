@@ -359,7 +359,6 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
                 )
 
         # 2. Blocks
-        print(hidden_states.size())
         if self.caption_projection is not None:
             batch_size = hidden_states.shape[0]
             encoder_hidden_states = self.caption_projection(encoder_hidden_states)
@@ -397,7 +396,6 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
         # 3. Output
         if self.is_input_continuous:
             if not self.use_linear_projection:
-                print(hidden_states.size())
                 hidden_states = hidden_states.reshape(batch, height, width, inner_dim).permute(0, 3, 1, 2).contiguous()
                 hidden_states = (
                     self.proj_out(hidden_states, scale=lora_scale)
