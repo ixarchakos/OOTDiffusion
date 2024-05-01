@@ -229,8 +229,6 @@ class BasicTransformerBlock(nn.Module):
         # Notice that normalization is always applied before the real computation in the following blocks.
         # 0. Self-Attention
         batch_size = hidden_states.shape[0]
-
-        print(hidden_states.size())
         # spatial_attn_input = hidden_states
         spatial_attn_inputs.append(hidden_states)
 
@@ -395,11 +393,8 @@ class FeedForward(nn.Module):
 
     def forward(self, hidden_states: torch.Tensor, scale: float = 1.0) -> torch.Tensor:
         compatible_cls = (GEGLU,) if USE_PEFT_BACKEND else (GEGLU, LoRACompatibleLinear)
-
         for module in self.net:
             if isinstance(module, compatible_cls):
-                print("att_garm_400", torch.cuda.max_memory_allocated())
-
                 hidden_states = module(hidden_states, scale)
             else:
                 hidden_states = module(hidden_states)

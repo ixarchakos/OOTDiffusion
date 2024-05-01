@@ -58,8 +58,8 @@ if __name__ == '__main__':
 
     cloth_img = Image.open(cloth_path).resize((384, 512))
     model_img = Image.open(model_path).resize((384, 512))
-    keypoints = openpose_model(model_img.resize((192, 256)))
-    model_parse, _ = parsing_model(model_img.resize((192, 256)))
+    keypoints = openpose_model(model_img.resize((384, 512)))
+    model_parse, _ = parsing_model(model_img.resize((384, 512)))
     mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
     mask = mask.resize((384, 512), Image.NEAREST)
     mask_gray = mask_gray.resize((384, 512), Image.NEAREST)
