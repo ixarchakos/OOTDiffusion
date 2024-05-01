@@ -109,7 +109,7 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
 
         conv_cls = nn.Conv2d if USE_PEFT_BACKEND else LoRACompatibleConv
         linear_cls = nn.Linear if USE_PEFT_BACKEND else LoRACompatibleLinear
-        exit()
+
         # 1. Transformer2DModel can process both standard continuous images of shape `(batch_size, num_channels, width, height)` as well as quantized image embeddings of shape `(batch_size, num_image_vectors)`
         # Define whether input is continuous or discrete depending on configuration
         self.is_input_continuous = (in_channels is not None) and (patch_size is None)
@@ -181,7 +181,8 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
                 embed_dim=inner_dim,
                 interpolation_scale=interpolation_scale,
             )
-
+        print("edw")
+        exit()
         # 3. Define transformers blocks
         self.transformer_blocks = nn.ModuleList(
             [
