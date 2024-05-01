@@ -25,7 +25,7 @@ parser.add_argument('--sample', type=int, default=4, required=False)
 parser.add_argument('--seed', type=int, default=-1, required=False)
 args = parser.parse_args()
 
-print("28", torch.cuda.max_memory_allocated())
+
 openpose_model = OpenPose(args.gpu_id)
 print("30", torch.cuda.max_memory_allocated())
 parsing_model = Parsing(args.gpu_id)
@@ -46,11 +46,11 @@ n_samples = args.sample
 seed = args.seed
 
 if model_type == "hd":
-    print("49", torch.cuda.max_memory_allocated())
     model = OOTDiffusionHD(args.gpu_id)
 elif model_type == "dc":
-    print("51", torch.cuda.max_memory_allocated())
+    print("52", torch.cuda.max_memory_allocated())
     model = OOTDiffusionDC(args.gpu_id)
+    print("54", torch.cuda.max_memory_allocated())
 else:
     raise ValueError("model_type must be \'hd\' or \'dc\'!")
 exit()
