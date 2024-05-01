@@ -1139,11 +1139,11 @@ class CrossAttnDownBlock2D(nn.Module):
         blocks = list(zip(self.resnets, self.attentions))
         print(self.downsamplers)
         print(hidden_states.size())
-        for downsampler in self.downsamplers:
-            try:
-                hidden_states = downsampler(hidden_states, scale=lora_scale)
-            except Exception:
-                continue
+        downsampler = Downsample2D(
+                        320, use_conv=True, out_channels=320, padding=1, name="op"
+                    )
+        hidden_states = downsampler(hidden_states, scale=lora_scale)
+
             # break
         for i, (resnet, attn) in enumerate(blocks):
 
