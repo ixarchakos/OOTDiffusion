@@ -324,7 +324,8 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             self.do_classifier_free_guidance,
             generator,
         )
-
+        print("edw327")
+        exit()
         height, width = vton_latents.shape[-2:]
         height = height * self.vae_scale_factor
         width = width * self.vae_scale_factor
@@ -341,8 +342,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             generator,
             latents,
         )
-        print("edw344")
-        exit()
+
         noise = latents.clone()
 
         # 8. Prepare extra step kwargs. TODO: Logic should ideally just be moved out of the pipeline
