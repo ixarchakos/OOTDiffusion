@@ -1109,6 +1109,7 @@ class CrossAttnDownBlock2D(nn.Module):
         self.resnets = nn.ModuleList(resnets)
 
         if add_downsample:
+            exit()
             self.downsamplers = nn.ModuleList(
                 [
                     Downsample2D(
