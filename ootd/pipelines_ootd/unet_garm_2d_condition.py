@@ -1033,7 +1033,9 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
             image_embeds = added_cond_kwargs.get("image_embeds")
             encoder_hidden_states = self.encoder_hid_proj(image_embeds)
         # 2. pre-process
+        print("condition_1036", torch.cuda.max_memory_allocated())
         sample = self.conv_in(sample)
+        print("condition_1038", torch.cuda.max_memory_allocated())
 
         # 2.5 GLIGEN position net
         if cross_attention_kwargs is not None and cross_attention_kwargs.get("gligen", None) is not None:
@@ -1096,17 +1098,17 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
                     sample += down_intrablock_additional_residuals.pop(0)
 
             down_block_res_samples += res_samples
-        print(is_controlnet)
-        if is_controlnet:
-            new_down_block_res_samples = ()
 
-            for down_block_res_sample, down_block_additional_residual in zip(
-                down_block_res_samples, down_block_additional_residuals
-            ):
-                down_block_res_sample = down_block_res_sample + down_block_additional_residual
-                new_down_block_res_samples = new_down_block_res_samples + (down_block_res_sample,)
-
-            down_block_res_samples = new_down_block_res_samples
+        # if is_controlnet:
+        #     new_down_block_res_samples = ()
+        #
+        #     for down_block_res_sample, down_block_additional_residual in zip(
+        #         down_block_res_samples, down_block_additional_residuals
+        #     ):
+        #         down_block_res_sample = down_block_res_sample + down_block_additional_residual
+        #         new_down_block_res_samples = new_down_block_res_samples + (down_block_res_sample,)
+        #
+        #     down_block_res_samples = new_down_block_res_samples
 
         # 4. mid
         if self.mid_block is not None:
