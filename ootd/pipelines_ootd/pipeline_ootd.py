@@ -312,8 +312,7 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
             self.do_classifier_free_guidance,
             generator,
         )
-        print("edw278")
-        exit()
+
         vton_latents, mask_latents, image_ori_latents = self.prepare_vton_latents(
             image_vton,
             mask,
@@ -351,7 +350,8 @@ class OotdPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMix
         # 9. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         self._num_timesteps = len(timesteps)
-
+        print("edw278")
+        exit()
         _, spatial_attn_outputs = self.unet_garm(
             garm_latents,
             0,
