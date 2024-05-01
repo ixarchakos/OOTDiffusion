@@ -292,6 +292,7 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
         self.conv_in = nn.Conv2d(
             in_channels, block_out_channels[0], kernel_size=conv_in_kernel, padding=conv_in_padding
         )
+        print(self.conv_in)
 
         # time
         if time_embedding_type == "fourier":
