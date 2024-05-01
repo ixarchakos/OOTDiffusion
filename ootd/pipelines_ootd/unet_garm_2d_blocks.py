@@ -1137,17 +1137,18 @@ class CrossAttnDownBlock2D(nn.Module):
         lora_scale = cross_attention_kwargs.get("scale", 1.0) if cross_attention_kwargs is not None else 1.0
 
         blocks = list(zip(self.resnets, self.attentions))
-        print(self.downsamplers)
-        # exit()
-        if self.downsamplers is not None:
-            for downsampler in self.downsamplers:
-                try:
-                    hidden_states = downsampler(hidden_states, scale=lora_scale)
-                except Exception:
-                    continue
 
-            output_states = output_states + (hidden_states,)
+        # if self.downsamplers is not None:
+        #     for downsampler in self.downsamplers:
+        #         try:
+        #             hidden_states = downsampler(hidden_states, scale=lora_scale)
+        #         except Exception:
+        #             continue
+        #
+        #     output_states = output_states + (hidden_states,)
         for i, (resnet, attn) in enumerate(blocks):
+            for downsampler in self.downsamplers:
+                hidden_states = downsampler(hidden_states, scale=lora_scale)
             if self.training and self.gradient_checkpointing:
 
                 def create_custom_forward(module, return_dict=None):
@@ -1197,12 +1198,12 @@ class CrossAttnDownBlock2D(nn.Module):
             if i == len(blocks) - 1 and additional_residuals is not None:
                 hidden_states = hidden_states + additional_residuals
 
-        if self.downsamplers is not None:
-            for downsampler in self.downsamplers:
-                try:
-                    hidden_states = downsampler(hidden_states, scale=lora_scale)
-                except Exception:
-                    continue
+        # if self.downsamplers is not None:
+        #     for downsampler in self.downsamplers:
+        #         try:
+        #             hidden_states = downsampler(hidden_states, scale=lora_scale)
+        #         except Exception:
+        #             continue
 
             output_states = output_states + (hidden_states,)
 
