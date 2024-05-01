@@ -1138,6 +1138,7 @@ class CrossAttnDownBlock2D(nn.Module):
 
         blocks = list(zip(self.resnets, self.attentions))
         print(self.downsamplers)
+        print(hidden_states.size())
         for downsampler in self.downsamplers:
             hidden_states = downsampler(hidden_states, scale=lora_scale)
             break
