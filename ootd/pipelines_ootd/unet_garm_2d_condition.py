@@ -290,9 +290,8 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
         # input
         conv_in_padding = (conv_in_kernel - 1) // 2
         self.conv_in = nn.Conv2d(
-            in_channels, 32, kernel_size=conv_in_kernel, padding=conv_in_padding
+            in_channels, block_out_channels[0], kernel_size=conv_in_kernel, padding=conv_in_padding
         )
-        print(self.conv_in)
 
         # time
         if time_embedding_type == "fourier":
@@ -383,7 +382,6 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
             self.class_embedding = nn.Linear(projection_class_embeddings_input_dim, time_embed_dim)
         else:
             self.class_embedding = None
-
 
         if addition_embed_type == "text":
             if encoder_hid_dim is not None:
@@ -880,7 +878,6 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
         # The overall upsampling factor is equal to 2 ** (# num of upsampling layers).
         # However, the upsampling interpolation output size can be forced to fit any upsampling size
         # on the fly if necessary.
-
         default_overall_up_factor = 2**self.num_upsamplers
 
         # upsample size should be forwarded when sample is not a multiple of `default_overall_up_factor`
@@ -963,8 +960,6 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
             else:
                 emb = emb + class_emb
 
-
-
         if self.config.addition_embed_type == "text":
             aug_emb = self.add_embedding(encoder_hidden_states)
         elif self.config.addition_embed_type == "text_image":
@@ -1038,9 +1033,7 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
             image_embeds = added_cond_kwargs.get("image_embeds")
             encoder_hidden_states = self.encoder_hid_proj(image_embeds)
         # 2. pre-process
-        print(sample.size())
         sample = self.conv_in(sample)
-        print(sample.size())
 
         # 2.5 GLIGEN position net
         if cross_attention_kwargs is not None and cross_attention_kwargs.get("gligen", None) is not None:
@@ -1104,16 +1097,16 @@ class UNetGarm2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMi
 
             down_block_res_samples += res_samples
 
-        # if is_controlnet:
-        #     new_down_block_res_samples = ()
+        if is_controlnet:
+            new_down_block_res_samples = ()
 
-        #     for down_block_res_sample, down_block_additional_residual in zip(
-        #         down_block_res_samples, down_block_additional_residuals
-        #     ):
-        #         down_block_res_sample = down_block_res_sample + down_block_additional_residual
-        #         new_down_block_res_samples = new_down_block_res_samples + (down_block_res_sample,)
+            for down_block_res_sample, down_block_additional_residual in zip(
+                down_block_res_samples, down_block_additional_residuals
+            ):
+                down_block_res_sample = down_block_res_sample + down_block_additional_residual
+                new_down_block_res_samples = new_down_block_res_samples + (down_block_res_sample,)
 
-        #     down_block_res_samples = new_down_block_res_samples
+            down_block_res_samples = new_down_block_res_samples
 
         # 4. mid
         if self.mid_block is not None:
