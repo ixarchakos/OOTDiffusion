@@ -146,7 +146,7 @@ def main():
                 print(c)
                 if c == 50:
                     break
-            except KeyError:
+            except Exception:
                 continue
 
 
