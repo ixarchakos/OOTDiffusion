@@ -118,7 +118,7 @@ def main():
                 mask = mask.resize((768, 1024), Image.NEAREST)
                 mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
                 masked_vton_img = Image.composite(mask_gray, model_img, mask)
-                masked_vton_img.save('./images_output/mask.jpg')
+                # masked_vton_img.save('./images_output/mask.jpg')
                 image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
 
                 # 0:upperbody; 1:lowerbody; 2:dress
@@ -134,7 +134,7 @@ def main():
                 mask = mask.resize((768, 1024), Image.NEAREST)
                 mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
                 masked_vton_img = Image.composite(mask_gray, model_img, mask)
-                masked_vton_img.save('./images_output/mask.jpg')
+                # masked_vton_img.save('./images_output/mask.jpg')
 
                 image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
                 image_object = BytesIO()
