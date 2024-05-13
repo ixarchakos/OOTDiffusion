@@ -1,4 +1,8 @@
 from pathlib import Path
+import sys
+PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
+sys.path.insert(0, str(PROJECT_ROOT))
+
 from PIL import Image
 from io import BytesIO
 from utils_ootd import get_mask_location
@@ -11,13 +15,11 @@ from db_ops import query_db
 from s3_ops import s3_client, upload_to_s3
 from outfit_list import remove_invalid_outfits
 
-import sys
+
 import argparse
 import csv
 import requests
 
-PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
-sys.path.insert(0, str(PROJECT_ROOT))
 parser = argparse.ArgumentParser(description='run ootd')
 parser.add_argument('--gpu_id', '-g', type=int, default=0, required=False)
 parser.add_argument('--model_path', type=str, default="/home/xarchakosi/model.png", required=True)
