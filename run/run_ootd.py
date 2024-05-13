@@ -101,9 +101,9 @@ def main():
     with open(f"vton.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["product_Id", "color_id", "image_url", "laydown_image_url", "seed", "model_version"])
+        c = 0
         for k, v in data.items():
             try:
-
                 # 0:upperbody; 1:lowerbody; 2:dress
                 if v[0][1] == "Bottoms":
                     category = 1
@@ -141,6 +141,10 @@ def main():
                 output_name = f'{k}.png'
                 vton_result = upload_file(s3, image_object, "VTON", output_name)
                 writer.writerow([laydowns[v[0][0]], laydowns[v[1][0]], vton_result])
+                c += 1
+                print(c)
+                if c == 50:
+                    break
             except KeyError:
                 continue
 
