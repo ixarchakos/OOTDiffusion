@@ -80,10 +80,19 @@ def get_image_file(image_url):
     return BytesIO(image_response.content)
 
 
+def load_data():
+    data = query_db(f"SELECT * FROM DS_PROJECTS.BEYONSEE.LAYDOWN_IMAGES;")
+    result = dict()
+    for index, data_row in tqdm(data.iterrows(), total=data.shape[0]):
+        image_url = data_row["IMAGE_URL"]
+        result[image_url.split("/")[-1]] = image_url
+    return result
+
+
 def main():
 
     data = remove_invalid_outfits()
-
+    laydowns = load_data()
     s3 = s3_client()
 
     with open(f"vton.csv", 'w') as f:
@@ -96,7 +105,7 @@ def main():
                 category = 1
             elif v[0][1] == "Tops":
                 category = 0
-            cloth_img = Image.open(get_image_file(v[0][0])).resize((768, 1024)).convert("RGB")
+            cloth_img = Image.open(get_image_file(laydowns[v[0][0]])).resize((768, 1024)).convert("RGB")
             model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
             keypoints = openpose_model(model_img.resize((384, 512)))
             model_parse, _ = parsing_model(model_img.resize((384, 512)))
@@ -111,7 +120,7 @@ def main():
                 category = 1
             elif v[1][1] == "Tops":
                 category = 0
-            cloth_img = Image.open(get_image_file(v[1][0])).resize((768, 1024)).convert("RGB")
+            cloth_img = Image.open(get_image_file(laydowns[v[1][0]])).resize((768, 1024)).convert("RGB")
             model_img = image.resize((768, 1024)).convert("RGB")
             keypoints = openpose_model(model_img.resize((384, 512)))
             model_parse, _ = parsing_model(model_img.resize((384, 512)))
@@ -127,8 +136,9 @@ def main():
 
             output_name = f'{k}.png'
             vton_result = upload_file(s3, image_object, "VTON", output_name)
-            print(v[0][0], v[1][0])
+            print(laydowns[v[0][0]], laydowns[v[1][0]])
             print(vton_result)
+            exit()
             writer.writerow([v[0][0], v[1][0], vton_result])
 
 
