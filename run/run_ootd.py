@@ -12,7 +12,7 @@ from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
 from tqdm import tqdm
 from db_ops import query_db
-from s3_ops import s3_client, upload_to_s3
+from s3_ops import s3_client, upload_file
 from outfit_list import remove_invalid_outfits
 
 
@@ -83,8 +83,6 @@ def get_image_file(image_url):
 def main():
 
     data = remove_invalid_outfits()
-    print(data)
-    exit()
 
     s3 = s3_client()
 
@@ -131,9 +129,11 @@ def main():
             image.save(image_object, format='PNG')
             image_object.seek(0)
 
-            # output_name = f'{image_url.split("/")[-1][:-4]}_{str(seed)}.png'
-            # vton_result = upload_to_s3()
-            # writer.writerow([v[0][0], v[1][0], vton_result])
+            output_name = f'{k}.png'
+            vton_result = upload_file(s3, image_object, "VTON", output_name)
+            print(v[0][0], v[1][0])
+            print(vton_result)
+            writer.writerow([v[0][0], v[1][0], vton_result])
 
 
 if __name__ == '__main__':
