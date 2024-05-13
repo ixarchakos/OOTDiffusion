@@ -84,9 +84,9 @@ def load_data():
     data = query_db(f"SELECT * FROM DS_PROJECTS.BEYONSEE.LAYDOWN_IMAGES;")
     result = dict()
     for index, data_row in tqdm(data.iterrows(), total=data.shape[0]):
-        image_url = data_row["IMAGE_URL"]
+        product_id, color_id, image_url = data_row["PRODUCT_ID"], data_row["COLOR_ID"], data_row["IMAGE_URL"]
         try:
-            result[image_url.split("/")[-1]] = image_url
+            result[f"{product_id}_{color_id}"] = image_url
         except AttributeError:
             continue
     return result

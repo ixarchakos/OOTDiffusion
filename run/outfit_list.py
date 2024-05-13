@@ -11,14 +11,14 @@ def remove_invalid_outfits():
     outfit_set = dict()
 
     for index, data in outfits.iterrows():
-        org_id, out_id, img_url, division = data["org_id"], data["outfit_id"], data["image_url"].split("/")[-1], data["division"]
+        var_id, org_id, out_id, img_url, division = data["variant_id"], data["org_id"], data["outfit_id"], data["image_url"].split("/")[-1], data["division"]
         # print(org_id, out_id, img_url, division)
         if division != "Tops" and division != "Bottoms":
             continue
         if f"{out_id}_{org_id}" not in outfit_set:
-            outfit_set[f"{out_id}_{org_id}"] = [(img_url, division)]
+            outfit_set[f"{out_id}_{org_id}"] = [(var_id, division)]
         else:
-            outfit_set[f"{out_id}_{org_id}"].append((img_url, division))
+            outfit_set[f"{out_id}_{org_id}"].append((var_id, division))
 
     # Delete cases where two Tops appear in the same outfit
     for k, items in outfit_set.copy().items():
