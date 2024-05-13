@@ -85,7 +85,10 @@ def load_data():
     result = dict()
     for index, data_row in tqdm(data.iterrows(), total=data.shape[0]):
         image_url = data_row["IMAGE_URL"]
-        result[image_url.split("/")[-1]] = image_url
+        try:
+            result[image_url.split("/")[-1]] = image_url
+        except AttributeError:
+            continue
     return result
 
 
