@@ -120,11 +120,7 @@ def main():
             mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
             masked_vton_img = Image.composite(mask_gray, model_img, mask)
 
-
-
-            image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)
-            print(image)
-
+            image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
             image_object = BytesIO()
             image.save(image_object, format='PNG')
             image_object.seek(0)
