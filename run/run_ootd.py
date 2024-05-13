@@ -111,7 +111,7 @@ def main():
                 elif v[0][1] == "Tops":
                     category = 0
                 cloth_img = Image.open(get_image_file(laydowns[v[0][0]])).resize((768, 1024)).convert("RGB")
-                cloth_img.show()
+                cloth_img.save(v[0][0] + ".jpg")
                 model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
                 keypoints = openpose_model(model_img.resize((384, 512)))
                 model_parse, _ = parsing_model(model_img.resize((384, 512)))
