@@ -104,6 +104,7 @@ def main():
         c = 0
         for k, v in data.items():
             try:
+                test = laydowns[v[1][0]]
                 # 0:upperbody; 1:lowerbody; 2:dress
                 if v[0][1] == "Bottoms":
                     category = 1
