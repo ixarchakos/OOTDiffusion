@@ -103,46 +103,49 @@ def main():
         writer.writerow(["product_Id", "color_id", "image_url", "laydown_image_url", "seed", "model_version"])
 
         for k, v in data.items():
-            # 0:upperbody; 1:lowerbody; 2:dress
-            if v[0][1] == "Bottoms":
-                category = 1
-            elif v[0][1] == "Tops":
-                category = 0
-            cloth_img = Image.open(get_image_file(laydowns[v[0][0]])).resize((768, 1024)).convert("RGB")
-            model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
-            keypoints = openpose_model(model_img.resize((384, 512)))
-            model_parse, _ = parsing_model(model_img.resize((384, 512)))
-            mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
-            mask = mask.resize((768, 1024), Image.NEAREST)
-            mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
-            masked_vton_img = Image.composite(mask_gray, model_img, mask)
-            image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
+            try:
+                # 0:upperbody; 1:lowerbody; 2:dress
+                if v[0][1] == "Bottoms":
+                    category = 1
+                elif v[0][1] == "Tops":
+                    category = 0
+                cloth_img = Image.open(get_image_file(laydowns[v[0][0]])).resize((768, 1024)).convert("RGB")
+                model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
+                keypoints = openpose_model(model_img.resize((384, 512)))
+                model_parse, _ = parsing_model(model_img.resize((384, 512)))
+                mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
+                mask = mask.resize((768, 1024), Image.NEAREST)
+                mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
+                masked_vton_img = Image.composite(mask_gray, model_img, mask)
+                image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
 
-            # 0:upperbody; 1:lowerbody; 2:dress
-            if v[1][1] == "Bottoms":
-                category = 1
-            elif v[1][1] == "Tops":
-                category = 0
-            cloth_img = Image.open(get_image_file(laydowns[v[1][0]])).resize((768, 1024)).convert("RGB")
-            model_img = image.resize((768, 1024)).convert("RGB")
-            keypoints = openpose_model(model_img.resize((384, 512)))
-            model_parse, _ = parsing_model(model_img.resize((384, 512)))
-            mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
-            mask = mask.resize((768, 1024), Image.NEAREST)
-            mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
-            masked_vton_img = Image.composite(mask_gray, model_img, mask)
+                # 0:upperbody; 1:lowerbody; 2:dress
+                if v[1][1] == "Bottoms":
+                    category = 1
+                elif v[1][1] == "Tops":
+                    category = 0
+                cloth_img = Image.open(get_image_file(laydowns[v[1][0]])).resize((768, 1024)).convert("RGB")
+                model_img = image.resize((768, 1024)).convert("RGB")
+                keypoints = openpose_model(model_img.resize((384, 512)))
+                model_parse, _ = parsing_model(model_img.resize((384, 512)))
+                mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
+                mask = mask.resize((768, 1024), Image.NEAREST)
+                mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
+                masked_vton_img = Image.composite(mask_gray, model_img, mask)
 
-            image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
-            image_object = BytesIO()
-            image.save(image_object, format='PNG')
-            image_object.seek(0)
+                image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
+                image_object = BytesIO()
+                image.save(image_object, format='PNG')
+                image_object.seek(0)
 
-            output_name = f'{k}.png'
-            vton_result = upload_file(s3, image_object, "VTON", output_name)
-            print(laydowns[v[0][0]], laydowns[v[1][0]])
-            print(vton_result)
-            exit()
-            writer.writerow([v[0][0], v[1][0], vton_result])
+                output_name = f'{k}.png'
+                vton_result = upload_file(s3, image_object, "VTON", output_name)
+                print(laydowns[v[0][0]], laydowns[v[1][0]])
+                print(vton_result)
+                exit()
+                writer.writerow([v[0][0], v[1][0], vton_result])
+            except KeyError:
+                continue
 
 
 if __name__ == '__main__':
