@@ -101,9 +101,13 @@ def main():
     with open(f"vton.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["product_Id", "color_id", "image_url", "laydown_image_url", "seed", "model_version"])
-
+        c = 0
         for k, v in data.items():
             try:
+                c += 1
+                print(c)
+                if c == 101:
+                    break
                 # 0:upperbody; 1:lowerbody; 2:dress
                 if v[0][1] == "Bottoms":
                     category = 1
