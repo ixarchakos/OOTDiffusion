@@ -146,7 +146,7 @@ def main():
                 writer.writerow([laydowns[v[0][0]], laydowns[v[1][0]], vton_result])
                 c += 1
                 print(c)
-                if c == 10:
+                if c == 25:
                     break
             except Exception:
                 continue
