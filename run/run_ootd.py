@@ -90,7 +90,7 @@ def main():
         writer = csv.writer(f)
         writer.writerow(["product_Id", "color_id", "image_url", "laydown_image_url", "seed", "model_version"])
 
-        for k, v in data:
+        for k, v in data.items():
             cloth_img = Image.open(get_image_file(v[0][0])).resize((768, 1024)).convert("RGB")
             model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
             keypoints = openpose_model(model_img.resize((384, 512)))
