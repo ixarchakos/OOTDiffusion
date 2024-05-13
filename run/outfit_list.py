@@ -12,6 +12,7 @@ def remove_invalid_outfits():
 
     for index, data in outfits.iterrows():
         org_id, out_id, img_url, division = data["org_id"], data["outfit_id"], data["image_url"], data["division"]
+        print(org_id, out_id, img_url, division)
         if division != "Tops" or division != "Bottoms":
             continue
         if f"{out_id}_{org_id}" not in outfit_set:
