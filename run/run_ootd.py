@@ -20,13 +20,13 @@ PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
 parser = argparse.ArgumentParser(description='run ootd')
 parser.add_argument('--gpu_id', '-g', type=int, default=0, required=False)
-parser.add_argument('--model_path', type=str, default="", required=True)
+parser.add_argument('--model_path', type=str, default="/home/xarchakosi/model.png", required=True)
 parser.add_argument('--cloth_path', type=str, default="", required=True)
 parser.add_argument('--model_type', type=str, default="dc", required=False)
 parser.add_argument('--category', '-c', type=int, default=0, required=False)
 parser.add_argument('--scale', type=float, default=2.0, required=False)
 parser.add_argument('--step', type=int, default=20, required=False)
-parser.add_argument('--sample', type=int, default=4, required=False)
+parser.add_argument('--sample', type=int, default=1, required=False)
 parser.add_argument('--seed', type=int, default=-1, required=False)
 args = parser.parse_args()
 
@@ -39,7 +39,7 @@ category_dict = ['upperbody', 'lowerbody', 'dress']
 category_dict_utils = ['upper_body', 'lower_body', 'dresses']
 
 model_type = args.model_type
-category = args.category # 0:upperbody; 1:lowerbody; 2:dress
+# 0:upperbody; 1:lowerbody; 2:dress
 cloth_path = args.cloth_path
 model_path = args.model_path
 
@@ -56,7 +56,7 @@ else:
     raise ValueError("model_type must be \'hd\' or \'dc\'!")
 
 
-def generate_image(cloth_img, model_img, masked_vton_img, mask):
+def generate_image(cloth_img, model_img, masked_vton_img, mask, category):
     images = model(
         model_type=model_type,
         category=category_dict[category],
@@ -72,11 +72,6 @@ def generate_image(cloth_img, model_img, masked_vton_img, mask):
     return images
 
 
-def load_data():
-    data = query_db(f"SELECT * FROM DS_PROJECTS.BEYONSEE.OUTFITS;")
-    return data
-
-
 def get_image_file(image_url):
     image_response = requests.get(image_url, timeout=20)
     image_response.raise_for_status()
@@ -84,8 +79,6 @@ def get_image_file(image_url):
 
 
 def main():
-    if model_type == 'hd' and category != 0:
-        raise ValueError("model_type \'hd\' requires category == 0 (upperbody)!")
 
     data = remove_invalid_outfits()
     print(data)
@@ -93,7 +86,7 @@ def main():
 
     s3 = s3_client()
 
-    with open(f"csv_files/{args.target_division.split(' ')[0]}_laydowns.csv", 'w') as f:
+    with open(f"csv_files/vton.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["product_Id", "color_id", "image_url", "laydown_image_url", "seed", "model_version"])
 
