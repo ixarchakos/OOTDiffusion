@@ -91,6 +91,11 @@ def main():
         writer.writerow(["product_Id", "color_id", "image_url", "laydown_image_url", "seed", "model_version"])
 
         for k, v in data.items():
+            # 0:upperbody; 1:lowerbody; 2:dress
+            if v[0][1] == "Bottoms":
+                category = 1
+            elif v[0][1] == "Tops":
+                category = 0
             cloth_img = Image.open(get_image_file(v[0][0])).resize((768, 1024)).convert("RGB")
             model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
             keypoints = openpose_model(model_img.resize((384, 512)))
@@ -99,15 +104,13 @@ def main():
             mask = mask.resize((768, 1024), Image.NEAREST)
             mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
             masked_vton_img = Image.composite(mask_gray, model_img, mask)
-
-            # 0:upperbody; 1:lowerbody; 2:dress
-            if v[0][1] == "Bottoms":
-                category = 1
-            elif v[0][1] == "Tops":
-                category = 0
             image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)
             print(image)
-
+            # 0:upperbody; 1:lowerbody; 2:dress
+            if v[1][1] == "Bottoms":
+                category = 1
+            elif v[1][1] == "Tops":
+                category = 0
             cloth_img = Image.open(get_image_file(v[1][0])).resize((768, 1024)).convert("RGB")
             model_img = image.resize((768, 1024)).convert("RGB")
             keypoints = openpose_model(model_img.resize((384, 512)))
@@ -117,11 +120,8 @@ def main():
             mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
             masked_vton_img = Image.composite(mask_gray, model_img, mask)
 
-            # 0:upperbody; 1:lowerbody; 2:dress
-            if v[1][1] == "Bottoms":
-                category = 1
-            elif v[1][1] == "Tops":
-                category = 0
+
+
             image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)
             print(image)
 
