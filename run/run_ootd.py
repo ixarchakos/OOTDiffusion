@@ -140,10 +140,7 @@ def main():
 
                 output_name = f'{k}.png'
                 vton_result = upload_file(s3, image_object, "VTON", output_name)
-                print(laydowns[v[0][0]], laydowns[v[1][0]])
-                print(vton_result)
-                exit()
-                writer.writerow([v[0][0], v[1][0], vton_result])
+                writer.writerow([laydowns[v[0][0]], laydowns[v[1][0]], vton_result])
             except KeyError:
                 continue
 
