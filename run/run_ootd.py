@@ -41,7 +41,7 @@ category_dict = ['upperbody', 'lowerbody', 'dress']
 category_dict_utils = ['upper_body', 'lower_body', 'dresses']
 
 model_type = args.model_type
-# 0:upperbody; 1:lowerbody; 2:dress
+
 cloth_path = args.cloth_path
 model_path = args.model_path
 
@@ -88,14 +88,12 @@ def main():
 
     s3 = s3_client()
 
-    with open(f"csv_files/vton.csv", 'w') as f:
+    with open(f"vton.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["product_Id", "color_id", "image_url", "laydown_image_url", "seed", "model_version"])
 
-        for index, data_row in tqdm(data.iterrows(), total=data.shape[0]):
-            product_id, color_id, image_url = data_row["SF_PRODUCT_ID"], data_row["COLOR_ID"], data_row["IMAGE_URL"]
-
-            cloth_img = Image.open(get_image_file(image_url)).resize((768, 1024)).convert("RGB")
+        for k, v in data:
+            cloth_img = Image.open(get_image_file(v[0][0])).resize((768, 1024)).convert("RGB")
             model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
             keypoints = openpose_model(model_img.resize((384, 512)))
             model_parse, _ = parsing_model(model_img.resize((384, 512)))
@@ -104,16 +102,38 @@ def main():
             mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
             masked_vton_img = Image.composite(mask_gray, model_img, mask)
 
-            image = generate_image(cloth_img, model_img, masked_vton_img, mask)
+            # 0:upperbody; 1:lowerbody; 2:dress
+            if v[0][1] == "Bottoms":
+                category = 1
+            elif v[0][1] == "Tops":
+                category = 0
+            image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)
+            print(image)
+
+            cloth_img = Image.open(get_image_file(v[1][0])).resize((768, 1024)).convert("RGB")
+            model_img = image.resize((768, 1024)).convert("RGB")
+            keypoints = openpose_model(model_img.resize((384, 512)))
+            model_parse, _ = parsing_model(model_img.resize((384, 512)))
+            mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
+            mask = mask.resize((768, 1024), Image.NEAREST)
+            mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
+            masked_vton_img = Image.composite(mask_gray, model_img, mask)
+
+            # 0:upperbody; 1:lowerbody; 2:dress
+            if v[1][1] == "Bottoms":
+                category = 1
+            elif v[1][1] == "Tops":
+                category = 0
+            image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)
             print(image)
 
             image_object = BytesIO()
             image.save(image_object, format='PNG')
             image_object.seek(0)
 
-            output_name = f'{image_url.split("/")[-1][:-4]}_{str(seed)}.png'
-            laydown_url = upload_to_s3(output_name, image_object, s3)
-            writer.writerow([str(product_id), str(color_id), image_url, laydown_url])
+            # output_name = f'{image_url.split("/")[-1][:-4]}_{str(seed)}.png'
+            # vton_result = upload_to_s3()
+            # writer.writerow([v[0][0], v[1][0], vton_result])
 
 
 if __name__ == '__main__':
