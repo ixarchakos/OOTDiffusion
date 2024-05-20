@@ -113,11 +113,10 @@ def main():
                 elif v[0][1] == "Dresses & Sets":
                     category = 2
                 cloth_img = Image.open(get_image_file(laydowns[v[0][0]]))
-                print("mpika")
-                cloth_img.save(v[0][0] + "_original.png")
+                cloth_img.save("original.png")
                 cloth_img.resize((768, 1024)).convert("RGB")
-                cloth_img.save(v[0][0] + "_modified.jpg")
-                break
+                cloth_img.save("modified.jpg")
+
                 model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
                 keypoints = openpose_model(model_img.resize((384, 512)))
                 model_parse, _ = parsing_model(model_img.resize((384, 512)))
@@ -155,7 +154,7 @@ def main():
                 writer.writerow([laydowns[v[0][0]], laydowns[v[1][0]], vton_result])
                 c += 1
                 print(c)
-                if c == 25:
+                if c == 5:
                     break
             except Exception:
                 continue
