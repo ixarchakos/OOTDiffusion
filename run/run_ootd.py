@@ -156,7 +156,7 @@ def main():
                 writer.writerow([laydowns[v[0][0]], laydowns[v[1][0]], vton_result])
                 c += 1
                 print(c)
-                if c == 5:
+                if c == 1:
                     break
             except Exception:
                 continue
