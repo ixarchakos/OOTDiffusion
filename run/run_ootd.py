@@ -113,11 +113,9 @@ def main():
                 elif v[0][1] == "Dresses & Sets":
                     category = 2
 
-                cloth_img = Image.open(get_image_file(laydowns[v[0][0]]))#.resize((768, 1024)).convert("RGBA")
+                cloth_img = Image.open(get_image_file(laydowns[v[0][0]]))
                 non_transparent = Image.new('RGBA', cloth_img.size, (255, 255, 255))
-                print("mpika")
                 non_transparent.paste(cloth_img, (0, 0), cloth_img)
-                print("mpika1")
                 cloth_img = non_transparent
                 cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
                 cloth_img.save("modified.png")
@@ -139,7 +137,15 @@ def main():
                     category = 1
                 elif v[1][1] == "Tops":
                     category = 0
-                cloth_img = Image.open(get_image_file(laydowns[v[1][0]])).resize((768, 1024)).convert("RGB")
+
+                cloth_img = Image.open(get_image_file(laydowns[v[1][0]]))
+                non_transparent = Image.new('RGBA', cloth_img.size, (255, 255, 255))
+                non_transparent.paste(cloth_img, (0, 0), cloth_img)
+                cloth_img = non_transparent
+                cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
+                cloth_img.save("modified.png")
+
+                # cloth_img = Image.open(get_image_file(laydowns[v[1][0]])).resize((768, 1024)).convert("RGB")
                 model_img = image.resize((768, 1024)).convert("RGB")
                 keypoints = openpose_model(model_img.resize((384, 512)))
                 model_parse, _ = parsing_model(model_img.resize((384, 512)))
@@ -159,7 +165,7 @@ def main():
                 writer.writerow([laydowns[v[0][0]], laydowns[v[1][0]], vton_result])
                 c += 1
                 print(c)
-                if c == 1:
+                if c == 30:
                     break
             except (KeyError, IndexError):
                 continue
