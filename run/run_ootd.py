@@ -110,8 +110,13 @@ def main():
                     category = 1
                 elif v[0][1] == "Tops":
                     category = 0
-                cloth_img = Image.open(get_image_file(laydowns[v[0][0]])).resize((768, 1024))
-                cloth_img.save(v[0][0] + ".jpg")
+                elif v[0][1] == "Dresses & Sets":
+                    category = 2
+                cloth_img = Image.open(get_image_file(laydowns[v[0][0]]))
+                cloth_img.save(v[0][0] + "_original.png")
+                cloth_img.resize((768, 1024)).convert("RGB")
+                cloth_img.save(v[0][0] + "_modified.jpg")
+                exit()
                 model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
                 keypoints = openpose_model(model_img.resize((384, 512)))
                 model_parse, _ = parsing_model(model_img.resize((384, 512)))
@@ -121,13 +126,15 @@ def main():
                 masked_vton_img = Image.composite(mask_gray, model_img, mask)
                 # masked_vton_img.save('./images_output/mask.jpg')
                 image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
+                if category == 2:
+                    continue
 
                 # 0:upperbody; 1:lowerbody; 2:dress
                 if v[1][1] == "Bottoms":
                     category = 1
                 elif v[1][1] == "Tops":
                     category = 0
-                cloth_img = Image.open(get_image_file(laydowns[v[1][0]])).resize((768, 1024))
+                cloth_img = Image.open(get_image_file(laydowns[v[1][0]])).resize((768, 1024)).convert("RGB")
                 model_img = image.resize((768, 1024)).convert("RGB")
                 keypoints = openpose_model(model_img.resize((384, 512)))
                 model_parse, _ = parsing_model(model_img.resize((384, 512)))
