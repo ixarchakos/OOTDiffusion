@@ -115,7 +115,9 @@ def main():
 
                 cloth_img = Image.open(get_image_file(laydowns[v[0][0]])).resize((768, 1024)).convert("RGB")
                 non_transparent = Image.new('RGB', (768, 1024), (255, 255, 255))
+                print("mpika")
                 non_transparent.paste(cloth_img, (0, 0), cloth_img)
+                print("mpika1")
                 cloth_img = non_transparent
                 cloth_img.save("modified.jpg")
 
