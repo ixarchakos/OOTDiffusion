@@ -119,7 +119,7 @@ def main():
                 non_transparent.paste(cloth_img, (0, 0), cloth_img)
                 print("mpika1")
                 cloth_img = non_transparent
-                cloth_img.resize((768, 1024)).convert("RGB")
+                cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
                 cloth_img.save("modified.png")
 
                 model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
