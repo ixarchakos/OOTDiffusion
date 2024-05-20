@@ -160,7 +160,7 @@ def main():
                 print(c)
                 if c == 1:
                     break
-            except KeyError or IndexError:
+            except (KeyError, IndexError):
                 continue
 
 
