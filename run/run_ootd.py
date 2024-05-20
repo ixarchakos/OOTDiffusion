@@ -113,6 +113,7 @@ def main():
                 elif v[0][1] == "Dresses & Sets":
                     category = 2
                 cloth_img = Image.open(get_image_file(laydowns[v[0][0]]))
+                print("mpika")
                 cloth_img.save(v[0][0] + "_original.png")
                 cloth_img.resize((768, 1024)).convert("RGB")
                 cloth_img.save(v[0][0] + "_modified.jpg")
