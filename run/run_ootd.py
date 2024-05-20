@@ -114,7 +114,7 @@ def main():
                     category = 2
                 cloth_img = Image.open(get_image_file(laydowns[v[0][0]]))
                 cloth_img.save("original.png")
-                cloth_img.resize((768, 1024)).convert("RGB")
+                cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
                 cloth_img.save("modified.jpg")
 
                 model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
