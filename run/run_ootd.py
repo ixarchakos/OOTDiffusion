@@ -103,7 +103,7 @@ def main():
         writer.writerow(["product_Id", "color_id", "image_url", "laydown_image_url", "seed", "model_version"])
         c = 0
         for k, v in data.items():
-            # try:
+            try:
                 test = laydowns[v[1][0]]
                 # 0:upperbody; 1:lowerbody; 2:dress
                 if v[0][1] == "Bottoms":
@@ -160,8 +160,8 @@ def main():
                 print(c)
                 if c == 1:
                     break
-            # except Exception:
-            #     continue
+            except KeyError:
+                continue
 
 
 if __name__ == '__main__':
