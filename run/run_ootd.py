@@ -113,12 +113,13 @@ def main():
                 elif v[0][1] == "Dresses & Sets":
                     category = 2
 
-                cloth_img = Image.open(get_image_file(laydowns[v[0][0]])).resize((768, 1024)).convert("RGBA")
-                non_transparent = Image.new('RGBA', (768, 1024), (255, 255, 255))
+                cloth_img = Image.open(get_image_file(laydowns[v[0][0]]))#.resize((768, 1024)).convert("RGBA")
+                non_transparent = Image.new('RGBA', cloth_img.size, (255, 255, 255))
                 print("mpika")
                 non_transparent.paste(cloth_img, (0, 0), cloth_img)
                 print("mpika1")
                 cloth_img = non_transparent
+                cloth_img.resize((768, 1024)).convert("RGB")
                 cloth_img.save("modified.png")
 
                 model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
