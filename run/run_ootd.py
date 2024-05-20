@@ -117,7 +117,7 @@ def main():
                 cloth_img.save(v[0][0] + "_original.png")
                 cloth_img.resize((768, 1024)).convert("RGB")
                 cloth_img.save(v[0][0] + "_modified.jpg")
-                exit()
+                break
                 model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
                 keypoints = openpose_model(model_img.resize((384, 512)))
                 model_parse, _ = parsing_model(model_img.resize((384, 512)))
