@@ -180,7 +180,7 @@ def king_size():
     data = load_ks()
     s3 = s3_client()
 
-    with open(f"vton.csv", 'w') as f:
+    with open(f"king_size_vton.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["PRODUCT_ID", "IMAGE_URL", "VTON"])
         c = 0
@@ -220,7 +220,7 @@ def king_size():
             writer.writerow([product_id, image_url, vton_result])
             c += 1
             print(c)
-            if c == 30:
+            if c == 10:
                 break
 
 
