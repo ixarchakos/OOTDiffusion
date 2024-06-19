@@ -195,11 +195,11 @@ def king_size():
             elif division == "Dresses & Sets":
                 category = 2
 
-            cloth_img = Image.open(get_image_file(image_url)).convert("RGB")  # .resize((768, 1024)).convert("RGB")
-            non_transparent = Image.new('RGB', cloth_img.size, (255, 255, 255))
-            non_transparent.paste(cloth_img, (0, 0), cloth_img)
-            cloth_img = non_transparent
-            cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
+            cloth_img = Image.open(get_image_file(image_url)).resize((768, 1024)).convert("RGB")
+            # non_transparent = Image.new('RGB', cloth_img.size, (255, 255, 255))
+            # non_transparent.paste(cloth_img, (0, 0), cloth_img)
+            # cloth_img = non_transparent
+            # cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
             cloth_img.save("modified.png")
 
             model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
