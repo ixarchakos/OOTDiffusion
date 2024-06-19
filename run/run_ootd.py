@@ -26,7 +26,7 @@ parser.add_argument('--model_path', type=str, default="/home/xarchakosi/model.pn
 parser.add_argument('--cloth_path', type=str, default="", required=False)
 parser.add_argument('--model_type', type=str, default="dc", required=False)
 parser.add_argument('--category', '-c', type=int, default=0, required=False)
-parser.add_argument('--scale', type=float, default=10.0, required=False)
+parser.add_argument('--scale', type=float, default=3.0, required=False)
 parser.add_argument('--step', type=int, default=20, required=False)
 parser.add_argument('--sample', type=int, default=1, required=False)
 parser.add_argument('--seed', type=int, default=-1, required=False)
@@ -195,11 +195,11 @@ def king_size():
             elif division == "Dresses & Sets":
                 category = 2
 
-            cloth_img = Image.open(get_image_file(image_url)).resize((768, 1024)).convert("RGB")
-            # non_transparent = Image.new('RGBA', cloth_img.size, (255, 255, 255))
-            # non_transparent.paste(cloth_img, (0, 0), cloth_img)
-            # cloth_img = non_transparent
-            # cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
+            cloth_img = Image.open(get_image_file(image_url))  # .resize((768, 1024)).convert("RGB")
+            non_transparent = Image.new('RGBA', cloth_img.size, (255, 255, 255))
+            non_transparent.paste(cloth_img, (0, 0), cloth_img)
+            cloth_img = non_transparent
+            cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
             cloth_img.save("modified.png")
 
             model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
