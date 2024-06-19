@@ -197,8 +197,7 @@ def king_size():
 
             cloth_img = Image.open(get_image_file(image_url)).convert("RGB")  # .resize((768, 1024)).convert("RGB")
             non_transparent = Image.new('RGBA', cloth_img.size, (255, 255, 255))
-            x, y = cloth_img.size
-            non_transparent.paste(cloth_img, (0, 0, x, y), cloth_img)
+            non_transparent.paste(cloth_img, (0, 0), cloth_img)
             cloth_img = non_transparent
             cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
             cloth_img.save("modified.png")
