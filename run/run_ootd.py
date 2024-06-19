@@ -80,7 +80,7 @@ def get_image_file(image_url):
     return BytesIO(image_response.content)
 
 
-def load_data():
+def load_outfits():
     data = query_db(f"SELECT * FROM DS_PROJECTS.BEYONSEE.LAYDOWN_IMAGES;")
     result = dict()
     for index, data_row in tqdm(data.iterrows(), total=data.shape[0]):
@@ -92,10 +92,15 @@ def load_data():
     return result
 
 
-def main():
+def load_ks():
+    data = query_db(f"select product_id, image_url, division from DS_PROJECTS.PRODUCT_DATA_MANAGEMENT_DEV.FBB_ACTIVE_PRODUCTS where brand_code = 'KS' and division = 'Tops';")
+    return data
+
+
+def outfit():
 
     data = remove_invalid_outfits()
-    laydowns = load_data()
+    laydowns = load_outfits()
     s3 = s3_client()
 
     with open(f"vton.csv", 'w') as f:
@@ -169,6 +174,58 @@ def main():
                     break
             except (KeyError, IndexError):
                 continue
+
+
+def king_size():
+    data = load_ks()
+    s3 = s3_client()
+
+    with open(f"vton.csv", 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(["PRODUCT_ID", "IMAGE_URL", "VTON"])
+        c = 0
+        for index, data_row in tqdm(data.iterrows(), total=data.shape[0]):
+            product_id, image_url, division = data_row["PRODUCT_ID"], data_row["IMAGE_URL"], data_row["DIVISION"]
+
+            # 0:upperbody; 1:lowerbody; 2:dress
+            if division == "Bottoms":
+                category = 1
+            elif division == "Tops":
+                category = 0
+            elif division == "Dresses & Sets":
+                category = 2
+
+            cloth_img = Image.open(get_image_file(image_url))
+            non_transparent = Image.new('RGBA', cloth_img.size, (255, 255, 255))
+            non_transparent.paste(cloth_img, (0, 0), cloth_img)
+            cloth_img = non_transparent
+            cloth_img = cloth_img.resize((768, 1024)).convert("RGB")
+            cloth_img.save("modified.png")
+
+            model_img = Image.open(model_path).resize((768, 1024)).convert("RGB")
+            keypoints = openpose_model(model_img.resize((384, 512)))
+            model_parse, _ = parsing_model(model_img.resize((384, 512)))
+            mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)
+            mask = mask.resize((768, 1024), Image.NEAREST)
+            mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
+            masked_vton_img = Image.composite(mask_gray, model_img, mask)
+
+            image = generate_image(cloth_img, model_img, masked_vton_img, mask, category)[0]
+            image_object = BytesIO()
+            image.save(image_object, format='PNG')
+            image_object.seek(0)
+
+            output_name = f'{image_url.split("/")[-1][:-4]}.png'
+            vton_result = upload_file(s3, image_object, "VTON", output_name)
+            writer.writerow([product_id, image_url, vton_result])
+            c += 1
+            print(c)
+            if c == 30:
+                break
+
+
+def main():
+    king_size()
 
 
 if __name__ == '__main__':
