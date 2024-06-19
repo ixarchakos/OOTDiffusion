@@ -180,7 +180,7 @@ def king_size():
     data = load_ks()
     s3 = s3_client()
 
-    with open(f"king_size_vton.csv", 'w') as f:
+    with open(f"king_size_vton_1.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["PRODUCT_ID", "IMAGE_URL", "VTON"])
         c = 0
@@ -215,12 +215,12 @@ def king_size():
             image.save(image_object, format='PNG')
             image_object.seek(0)
 
-            output_name = f'{image_url.split("/")[-1][:-4]}.png'
+            output_name = f'{image_url.split("/")[-1][:-4]}_1.png'
             vton_result = upload_file(s3, image_object, "VTON", output_name)
             writer.writerow([product_id, image_url, vton_result])
             c += 1
             print(c)
-            if c == 10:
+            if c == 50:
                 break
 
 
